@@ -1,5 +1,8 @@
 {
   "name": "hetic-calendar-api",
+  "engines": {
+    "node": ">=22.15.0"
+  },
   "version": "0.0.1",
   "description": "",
   "author": "",

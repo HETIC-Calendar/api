@@ -1,10 +1,16 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { HelloWorldUseCase } from './core/usecases/hello-world.use-case';
+import { HelloWorldController } from './adapters/api/controller/hello-world.controller';
 
 @Module({
   imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [HelloWorldController],
+  providers: [
+    {
+      provide: HelloWorldUseCase,
+      useFactory: () => new HelloWorldUseCase(),
+      inject: [],
+    },
+  ],
 })
 export class AppModule {}

@@ -45,4 +45,8 @@ export class PrismaRoomRepository implements RoomRepository {
   async remove(id: string): Promise<void> {
     await this.prisma.room.delete({ where: { id } });
   }
+
+  removeAll(): void {
+    throw new Error('Method not implemented.');
+  }
 }

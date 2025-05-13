@@ -7,14 +7,23 @@ import { PrismaRoomRepository } from './adapters/prisma/prisma-room.repository';
 import { PrismaService } from './adapters/prisma/prisma.service';
 import { RoomController } from './adapters/api/controller/room.controller';
 import { GetAllRoomsUseCase } from './core/usecases/get-all-rooms.use-case';
+import { TalkRepository } from './core/domain/repository/talk.repository';
+import { CreateTalkUseCase } from './core/usecases/create-talk.use-case';
+import { PrismaTalkRepository } from './adapters/prisma/prisma-talk.repository';
+import { TalkController } from './adapters/api/controller/talk.controller';
 
 @Module({
-  controllers: [HelloWorldController, RoomController],
+  controllers: [HelloWorldController, RoomController, TalkController],
   providers: [
     PrismaService,
     {
       provide: RoomRepository,
       useFactory: (prisma: PrismaService) => new PrismaRoomRepository(prisma),
+      inject: [PrismaService],
+    },
+    {
+      provide: TalkRepository,
+      useFactory: (prisma: PrismaService) => new PrismaTalkRepository(prisma),
       inject: [PrismaService],
     },
     {
@@ -32,6 +41,14 @@ import { GetAllRoomsUseCase } from './core/usecases/get-all-rooms.use-case';
       useFactory: (roomRepository: RoomRepository) =>
         new GetAllRoomsUseCase(roomRepository),
       inject: [RoomRepository],
+    },
+    {
+      provide: CreateTalkUseCase,
+      useFactory: (
+        talkRepository: TalkRepository,
+        roomRepository: RoomRepository,
+      ) => new CreateTalkUseCase(talkRepository, roomRepository),
+      inject: [TalkRepository, RoomRepository],
     },
   ],
 })

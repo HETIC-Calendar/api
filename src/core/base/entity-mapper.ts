@@ -1,5 +1,5 @@
-export interface EntityMapper<Entity, DTO> {
-  fromDomain(entity: Entity): DTO;
+export interface EntityMapper<Model, Entity> {
+  fromDomain(model: Model): Entity;
 
-  toDomain(dto: DTO): Entity;
+  toDomain(entity: Entity): Model;
 }

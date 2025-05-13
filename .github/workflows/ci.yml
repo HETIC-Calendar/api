@@ -33,6 +33,7 @@ jobs:
       - name: Lint Project
         run: |
           pnpm install --frozen-lockfile
+          pnpx prisma generate
           pnpm run lint
 
   build:

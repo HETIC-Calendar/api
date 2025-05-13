@@ -1,5 +1,5 @@
 import { UseCase } from '../base/use-case';
-import { NameRequiredError } from '../error/NameRequiredError';
+import { NameRequiredError } from '../domain/error/NameRequiredError';
 
 export type HelloWorldCommand = {
   name: string;

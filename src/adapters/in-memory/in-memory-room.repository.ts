@@ -7,9 +7,8 @@ export class InMemoryRoomRepository implements RoomRepository {
   private rooms: Map<string, Room> = new Map();
 
   create(room: Room): any {
-    const id = crypto.randomUUID();
-    this.rooms.set(id, room);
-    return { ...room, id };
+    this.rooms.set(room.id, room);
+    return room;
   }
 
   findById(id: string): Room | null {

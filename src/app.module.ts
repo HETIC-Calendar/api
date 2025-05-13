@@ -5,9 +5,11 @@ import { CreateRoomUseCase } from './core/usecases/create-room.use-case';
 import { RoomRepository } from './core/domain/repository/room.repository';
 import { PrismaRoomRepository } from './adapters/prisma/prisma-room.repository';
 import { PrismaService } from './adapters/prisma/prisma.service';
+import { RoomController } from './adapters/api/controller/room.controller';
+import { GetAllRoomsUseCase } from './core/usecases/get-all-rooms.use-case';
 
 @Module({
-  controllers: [HelloWorldController],
+  controllers: [HelloWorldController, RoomController],
   providers: [
     PrismaService,
     {
@@ -23,6 +25,12 @@ import { PrismaService } from './adapters/prisma/prisma.service';
       provide: CreateRoomUseCase,
       useFactory: (roomRepository: RoomRepository) =>
         new CreateRoomUseCase(roomRepository),
+      inject: [RoomRepository],
+    },
+    {
+      provide: GetAllRoomsUseCase,
+      useFactory: (roomRepository: RoomRepository) =>
+        new GetAllRoomsUseCase(roomRepository),
       inject: [RoomRepository],
     },
   ],

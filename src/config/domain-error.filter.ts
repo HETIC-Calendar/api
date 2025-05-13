@@ -4,7 +4,7 @@ import {
   ArgumentsHost,
   HttpStatus,
 } from '@nestjs/common';
-import { NameRequiredError } from '../core/error/NameRequiredError';
+import { NameRequiredError } from '../core/domain/error/NameRequiredError';
 import { DomainError } from '../core/base/domain-error';
 
 @Catch(DomainError)

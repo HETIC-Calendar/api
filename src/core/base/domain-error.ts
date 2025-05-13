@@ -1,5 +1,5 @@
 export class DomainError extends Error {
-  constructor(public readonly message: string) {
+  constructor(public override readonly message: string) {
     super(message);
   }
 }

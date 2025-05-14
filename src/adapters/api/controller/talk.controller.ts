@@ -32,7 +32,6 @@ import { GetAllTalksByStatusUseCase } from '../../../core/usecases/get-all-talks
 import { TalkStatus } from '../../../core/domain/type/TalkStatus';
 import { GetAllTalksResponse } from '../response/get-all-talks.response';
 
-@UseGuards(JwtAuthGuard)
 @Controller('/talks')
 export class TalkController {
   constructor(
@@ -67,6 +66,7 @@ export class TalkController {
     );
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @ApiOperation({ summary: 'Create a new talk' })
   @ApiCreatedResponse({
@@ -98,6 +98,7 @@ export class TalkController {
     return CreateTalkMapper.fromDomain(talk);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/:talkId/approve-or-reject')
   @ApiOperation({ summary: 'Accept or reject a talk' })
   @ApiNoContentResponse({

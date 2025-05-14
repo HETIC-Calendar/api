@@ -1,8 +1,11 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { CreateRoomUseCase } from '../../../core/usecases/create-room.use-case';
 import { CreateRoomRequest } from '../request/create-room.request';
 import { CreateRoomMapper } from '../mapper/create-room.mapper';
 import { GetAllRoomsUseCase } from '../../../core/usecases/get-all-rooms.use-case';
+import { CreateRoomResponse } from '../response/create-room.response';
+import { GetAllRoomsResponse } from '../response/get-all-rooms.response';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -11,10 +14,10 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { CreateRoomResponse } from '../response/create-room.response';
-import { GetAllRoomsResponse } from '../response/get-all-rooms.response';
 
+@UseGuards(JwtAuthGuard)
 @Controller('/rooms')
 export class RoomController {
   constructor(
@@ -42,6 +45,9 @@ export class RoomController {
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
   })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized access',
+  })
   async createRoom(
     @Body() body: CreateRoomRequest,
   ): Promise<CreateRoomResponse> {
@@ -58,6 +64,9 @@ export class RoomController {
   })
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized access',
   })
   async getAllRooms(): Promise<GetAllRoomsResponse> {
     const rooms = await this.getAllRoomsUseCase.execute();

@@ -1,9 +1,7 @@
 import { EntityMapper } from '../../../core/base/entity-mapper';
 import { Room } from '../../../core/domain/model/Room';
 import { Room as RoomEntity } from '@prisma/client';
-import { Injectable } from '@nestjs/common';
 
-@Injectable()
 export class PrismaRoomMapper implements EntityMapper<Room, RoomEntity> {
   fromDomain(model: Room): RoomEntity {
     return {

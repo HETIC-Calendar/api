@@ -1,12 +1,14 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { CreateTalkUseCase } from '../../../core/usecases/create-talk.use-case';
+import { CreateTalkCreationRequestUseCase } from '../../../core/usecases/create-talk-creation-request.use-case';
 import { Talk } from '../../../core/domain/model/Talk';
 import { CreateTalkRequest } from '../request/create-talk.request';
 import { TalkMapper } from '../mapper/talk.mapper';
 
 @Controller('/talks')
 export class TalkController {
-  constructor(private readonly createTalkUseCase: CreateTalkUseCase) {}
+  constructor(
+    private readonly createTalkUseCase: CreateTalkCreationRequestUseCase,
+  ) {}
 
   @Post()
   async createTalk(@Body() body: CreateTalkRequest): Promise<Talk> {

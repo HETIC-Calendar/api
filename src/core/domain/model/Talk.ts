@@ -1,7 +1,11 @@
 import { DomainModel } from '../../base/domain-model';
+import { TalkStatus } from '../type/TalkStatus';
+import { TalkSubject } from '../type/TalkSubject';
 
 export class Talk extends DomainModel {
+  status: TalkStatus;
   title: string;
+  subject: TalkSubject;
   description: string;
   speaker: string;
   roomId: string;
@@ -12,7 +16,9 @@ export class Talk extends DomainModel {
 
   constructor(
     id: string,
+    status: TalkStatus,
     title: string,
+    subject: TalkSubject,
     description: string,
     speaker: string,
     roomId: string,
@@ -22,7 +28,9 @@ export class Talk extends DomainModel {
     createdAt?: Date,
   ) {
     super(id);
+    this.status = status;
     this.title = title;
+    this.subject = subject;
     this.description = description;
     this.speaker = speaker;
     this.roomId = roomId;

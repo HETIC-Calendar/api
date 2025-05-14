@@ -5,9 +5,12 @@ import { InvalidTalkTimeError } from '../domain/error/InvalidTalkTimeError';
 import { TalkOverlapError } from '../domain/error/TalkOverlapError';
 import { RoomRepository } from '../domain/repository/room.repository';
 import { RoomNotFoundError } from '../domain/error/RoomNotFoundError';
+import { TalkSubject } from '../domain/type/TalkSubject';
+import { TalkStatus } from '../domain/type/TalkStatus';
 
 export type CreateTalkCommand = {
   title: string;
+  subject: TalkSubject;
   description: string;
   speaker: string;
   roomId: string;
@@ -15,10 +18,12 @@ export type CreateTalkCommand = {
   endTime: Date;
 };
 
-export class CreateTalkUseCase implements UseCase<CreateTalkCommand, Talk> {
+export class CreateTalkCreationRequestUseCase
+  implements UseCase<CreateTalkCommand, Talk>
+{
   // TODO: Move to config
-  private MINIMAL_HOUR = 9;
-  private MAXIMAL_HOUR = 19;
+  private readonly MINIMAL_HOUR = 9;
+  private readonly MAXIMAL_HOUR = 19;
 
   constructor(
     private readonly talkRepository: TalkRepository,
@@ -63,7 +68,9 @@ export class CreateTalkUseCase implements UseCase<CreateTalkCommand, Talk> {
 
     const talk = new Talk(
       crypto.randomUUID(),
+      TalkStatus.PENDING_APPROVAL,
       command.title,
+      command.subject,
       command.description,
       command.speaker,
       command.roomId,

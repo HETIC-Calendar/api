@@ -5,6 +5,7 @@ import { TalkStatus } from '../../domain/type/TalkStatus';
 import { TalkSubject } from '../../domain/type/TalkSubject';
 import { RoomRepository } from '../../domain/repository/room.repository';
 import { InMemoryRoomRepository } from '../../../adapters/in-memory/in-memory-room.repository';
+import { TalkLevel } from '../../domain/type/TalkLevel';
 
 describe('GetAllTalksByStatusUseCase', () => {
   let talkRepository: TalkRepository;
@@ -137,6 +138,7 @@ describe('GetAllTalksByStatusUseCase', () => {
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
       speaker: 'John Doe',
       roomId: 'room-1',
+      level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:00:00Z'),
       endTime: new Date('2023-10-01T11:00:00Z'),
       createdAt: new Date(),

@@ -1,11 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { TalkLevel } from '../../../core/domain/type/TalkLevel';
+import { TalkSubject } from '../../../core/domain/type/TalkSubject';
 
 export class CreateTalkRequest {
   @ApiProperty()
   title: string;
 
-  @ApiProperty()
-  subject: string;
+  @ApiProperty({ enum: TalkSubject })
+  subject: TalkSubject;
 
   @ApiProperty()
   description: string;
@@ -16,6 +18,9 @@ export class CreateTalkRequest {
   @ApiProperty()
   roomId: string;
 
+  @ApiProperty({ enum: TalkLevel })
+  level: TalkLevel;
+
   @ApiProperty()
   startTime: string;
 
@@ -24,10 +29,11 @@ export class CreateTalkRequest {
 
   constructor(
     title: string,
-    subject: string,
+    subject: TalkSubject,
     description: string,
     speaker: string,
     roomId: string,
+    level: TalkLevel,
     startTime: string,
     endTime: string,
   ) {
@@ -36,6 +42,7 @@ export class CreateTalkRequest {
     this.description = description;
     this.speaker = speaker;
     this.roomId = roomId;
+    this.level = level;
     this.startTime = startTime;
     this.endTime = endTime;
   }

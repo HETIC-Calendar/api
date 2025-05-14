@@ -3,6 +3,7 @@ import { Talk } from '../../../core/domain/model/Talk';
 import { Talk as TalkEntity, $Enums } from '@prisma/client';
 import { TalkSubject } from '../../../core/domain/type/TalkSubject';
 import { TalkStatus } from '../../../core/domain/type/TalkStatus';
+import { TalkLevel } from '../../../core/domain/type/TalkLevel';
 
 export class PrismaTalkMapper implements EntityMapper<Talk, TalkEntity> {
   fromDomain(model: Talk): TalkEntity {
@@ -14,6 +15,7 @@ export class PrismaTalkMapper implements EntityMapper<Talk, TalkEntity> {
       description: model.description,
       speaker: model.speaker,
       roomId: model.roomId,
+      level: model.level,
       startTime: model.startTime,
       endTime: model.endTime,
       updatedAt: model.updatedAt,
@@ -30,6 +32,7 @@ export class PrismaTalkMapper implements EntityMapper<Talk, TalkEntity> {
       description: entity.description,
       speaker: entity.speaker,
       roomId: entity.roomId,
+      level: this.mapTalkLevelToDomain(entity.level),
       startTime: entity.startTime,
       endTime: entity.endTime,
       updatedAt: entity.updatedAt,
@@ -74,6 +77,19 @@ export class PrismaTalkMapper implements EntityMapper<Talk, TalkEntity> {
         return TalkSubject.GAME_DEVELOPMENT;
       default:
         throw new Error('Invalid talk subject');
+    }
+  }
+
+  private mapTalkLevelToDomain(level: $Enums.TalkLevel): TalkLevel {
+    switch (level) {
+      case 'BEGINNER':
+        return TalkLevel.BEGINNER;
+      case 'INTERMEDIATE':
+        return TalkLevel.INTERMEDIATE;
+      case 'ADVANCED':
+        return TalkLevel.ADVANCED;
+      default:
+        throw new Error('Invalid talk level');
     }
   }
 }

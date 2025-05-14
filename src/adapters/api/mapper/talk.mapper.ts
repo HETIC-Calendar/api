@@ -1,6 +1,8 @@
 import { CreateTalkCommand } from '../../../core/usecases/create-talk-creation-request.use-case';
 import { CreateTalkRequest } from '../request/create-talk.request';
 import { TalkSubject } from '../../../core/domain/type/TalkSubject';
+import { Talk } from '../../../core/domain/model/Talk';
+import { CreateTalkResponse } from '../response/create-talk.response';
 
 export class TalkMapper {
   static toDomain(request: CreateTalkRequest): CreateTalkCommand {
@@ -40,5 +42,19 @@ export class TalkMapper {
       default:
         throw new Error('Invalid talk subject');
     }
+  }
+
+  static fromDomain(talk: Talk): CreateTalkResponse {
+    return {
+      id: talk.id,
+      title: talk.title,
+      description: talk.description,
+      speaker: talk.speaker,
+      roomId: talk.roomId,
+      startTime: talk.startTime.toISOString(),
+      endTime: talk.endTime.toISOString(),
+      createdAt: talk.createdAt,
+      updatedAt: talk.updatedAt,
+    };
   }
 }

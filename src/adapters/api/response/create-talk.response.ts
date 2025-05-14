@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateTalkRequest {
+export class CreateTalkResponse {
   @ApiProperty()
-  title: string;
+  id: string;
 
   @ApiProperty()
-  subject: string;
+  title: string;
 
   @ApiProperty()
   description: string;
@@ -22,21 +22,31 @@ export class CreateTalkRequest {
   @ApiProperty()
   endTime: string;
 
+  @ApiProperty()
+  createdAt: Date;
+
+  @ApiProperty()
+  updatedAt: Date;
+
   constructor(
+    id: string,
     title: string,
-    subject: string,
     description: string,
     speaker: string,
     roomId: string,
     startTime: string,
     endTime: string,
+    createdAt: Date,
+    updatedAt: Date,
   ) {
+    this.id = id;
     this.title = title;
-    this.subject = subject;
     this.description = description;
     this.speaker = speaker;
     this.roomId = roomId;
     this.startTime = startTime;
     this.endTime = endTime;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }

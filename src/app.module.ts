@@ -45,6 +45,7 @@ import { UserRepository } from './core/domain/repository/user.repository';
     {
       provide: TalkRepository,
       useFactory: (prisma: PrismaService) => new PrismaTalkRepository(prisma),
+      inject: [PrismaService],
     },
     {
       provide: UserRepository,

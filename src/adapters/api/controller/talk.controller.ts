@@ -1,11 +1,15 @@
-import { Body, Controller, Post, Param, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Param,
+  UseGuards,
+  Get,
+  Query,
+} from '@nestjs/common';
 import { CreateTalkCreationRequestUseCase } from '../../../core/usecases/create-talk-creation-request.use-case';
 import { ApproveOrRejectTalkUseCase } from '../../../core/usecases/approve-or-reject-talk-use.case';
 import { CreateTalkRequest } from '../request/create-talk.request';
-import { CreateTalkResponse } from '../response/create-talk.response';
-import { ApproveOrRejectTalkMapper } from '../mapper/approve-or-reject-talk.mapper';
-import { ApproveOrRejectTalkRequest } from '../request/approve-or-reject-talk.request';
-import { CreateTalkMapper } from '../mapper/create-talk.mapper';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import {
   ApiBadRequestResponse,
@@ -14,9 +18,19 @@ import {
   ApiInternalServerErrorResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { CreateTalkResponse } from '../response/create-talk.response';
+import { ApproveOrRejectTalkMapper } from '../mapper/approve-or-reject-talk.mapper';
+import { ApproveOrRejectTalkRequest } from '../request/approve-or-reject-talk.request';
+import { CreateTalkMapper } from '../mapper/create-talk.mapper';
+import { GetAllTalksByStatusRequest } from '../request/get-all-talks-by-status.request';
+import { GetAllTalksByStatusUseCase } from '../../../core/usecases/get-all-talks-by-status.use-case';
+import { TalkStatus } from '../../../core/domain/type/TalkStatus';
+import { GetAllTalksResponse } from '../response/get-all-talks.response';
 
 @UseGuards(JwtAuthGuard)
 @Controller('/talks')
@@ -24,7 +38,34 @@ export class TalkController {
   constructor(
     private readonly createTalkUseCase: CreateTalkCreationRequestUseCase,
     private readonly approveOrRejectTalkUseCase: ApproveOrRejectTalkUseCase,
+    private readonly getAllTalksByStatusUseCase: GetAllTalksByStatusUseCase,
   ) {}
+
+  @Get()
+  @ApiQuery({
+    name: 'status',
+    enum: TalkStatus,
+    required: false,
+    description: 'Filter talks by status',
+  })
+  @ApiOperation({ summary: 'Get all talks by status' })
+  @ApiOkResponse({
+    description: 'List of all talks',
+    type: GetAllTalksResponse,
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Internal server error',
+  })
+  async getAllTalks(
+    @Query('status')
+    status: TalkStatus,
+  ): Promise<GetAllTalksResponse> {
+    const request: GetAllTalksByStatusRequest = { status };
+    const talks = await this.getAllTalksByStatusUseCase.execute(request);
+    return new GetAllTalksResponse(
+      talks.map((talk) => CreateTalkMapper.fromDomain(talk)),
+    );
+  }
 
   @Post()
   @ApiOperation({ summary: 'Create a new talk' })

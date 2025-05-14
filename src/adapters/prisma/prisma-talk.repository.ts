@@ -3,6 +3,7 @@ import { Talk } from '../../core/domain/model/Talk';
 import { PrismaService } from './prisma.service';
 import { PrismaTalkMapper } from './mapper/prisma-talk.mapper';
 import { Injectable } from '@nestjs/common';
+import { TalkStatus } from '../../core/domain/type/TalkStatus';
 
 @Injectable()
 export class PrismaTalkRepository implements TalkRepository {
@@ -34,6 +35,13 @@ export class PrismaTalkRepository implements TalkRepository {
   async findByRoomId(roomId: string): Promise<Talk[]> {
     const entities = await this.prisma.talk.findMany({
       where: { roomId },
+    });
+    return entities.map((entity) => this.mapper.toDomain(entity));
+  }
+
+  async findByStatus(status: TalkStatus): Promise<Talk[]> {
+    const entities = await this.prisma.talk.findMany({
+      where: { status },
     });
     return entities.map((entity) => this.mapper.toDomain(entity));
   }

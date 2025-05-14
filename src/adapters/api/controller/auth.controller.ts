@@ -1,15 +1,4 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { CreateUserUseCase } from '../../../core/usecases/create-user.use-case';
-import { LoginUseCase } from '../../../core/usecases/login.use-case';
-import { CreateUserRequest } from '../request/create-user.request';
-import { User } from '../../../core/domain/model/User';
-import { UserMapper } from '../mapper/user.mapper';
-import { LoginMapper } from '../mapper/login.mapper';
-import { LoginResponse } from '../response/create-user.response';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { CurrentUser } from '../decorator/current-user.decorator';
-import { ProfileMapper } from '../mapper/profile.mapper';
-import { ProfileRequest } from '../request/profile.request';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -19,6 +8,17 @@ import {
   ApiOkResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { CurrentUser } from '@adapters/api/decorator/current-user.decorator';
+import { JwtAuthGuard } from '@adapters/api/guards/jwt-auth.guard';
+import { LoginMapper } from '@adapters/api/mapper/login.mapper';
+import { ProfileMapper } from '@adapters/api/mapper/profile.mapper';
+import { UserMapper } from '@adapters/api/mapper/user.mapper';
+import { CreateUserRequest } from '@adapters/api/request/create-user.request';
+import { ProfileRequest } from '@adapters/api/request/profile.request';
+import { LoginResponse } from '@adapters/api/response/create-user.response';
+import { User } from '@core/domain/model/User';
+import { CreateUserUseCase } from '@core/usecases/create-user.use-case';
+import { LoginUseCase } from '@core/usecases/login.use-case';
 
 @Controller('/auth')
 export class UserController {

@@ -1,5 +1,5 @@
-import { DomainError } from '../../base/domain-error';
-import { TalkStatus } from '../type/TalkStatus';
+import { DomainError } from '@core/base/domain-error';
+import { TalkStatus } from '@core/domain/type/TalkStatus';
 
 export class TalkAlreadyApprovedOrRejectedError extends DomainError {
   constructor(talkId: string, talkStatus: TalkStatus) {

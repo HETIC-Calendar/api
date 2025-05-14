@@ -1,28 +1,27 @@
 import { Module } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
-
-import { CreateRoomUseCase } from './core/usecases/create-room.use-case';
-import { CreateTalkCreationRequestUseCase } from './core/usecases/create-talk-creation-request.use-case';
-import { CreateUserUseCase } from './core/usecases/create-user.use-case';
-import { GetAllRoomsUseCase } from './core/usecases/get-all-rooms.use-case';
-import { HelloWorldController } from './adapters/api/controller/hello-world.controller';
-import { HelloWorldUseCase } from './core/usecases/hello-world.use-case';
-import { JwtServiceAdapter } from './adapters/jwt/jwt.service';
-import { LoginUseCase } from './core/usecases/login.use-case';
-import { PrismaRoomRepository } from './adapters/prisma/prisma-room.repository';
-import { PrismaService } from './adapters/prisma/prisma.service';
-import { PrismaTalkRepository } from './adapters/prisma/prisma-talk.repository';
-import { PrismaUserRepository } from './adapters/prisma/prisma-user.repository';
-import { RoomController } from './adapters/api/controller/room.controller';
-import { RoomRepository } from './core/domain/repository/room.repository';
-import { TalkController } from './adapters/api/controller/talk.controller';
-import { TalkRepository } from './core/domain/repository/talk.repository';
-import { TokenService } from './core/domain/service/token.service';
-import { UserController } from './adapters/api/controller/auth.controller';
-import { UserRepository } from './core/domain/repository/user.repository';
-import { ApproveOrRejectTalkUseCase } from './core/usecases/approve-or-reject-talk-use.case';
-import { JwtAuthGuard } from './adapters/api/guards/jwt-auth.guard';
-import { GetAllTalksByStatusUseCase } from './core/usecases/get-all-talks-by-status.use-case';
+import { UserController } from '@adapters/api/controller/auth.controller';
+import { HelloWorldController } from '@adapters/api/controller/hello-world.controller';
+import { RoomController } from '@adapters/api/controller/room.controller';
+import { TalkController } from '@adapters/api/controller/talk.controller';
+import { JwtAuthGuard } from '@adapters/api/guards/jwt-auth.guard';
+import { JwtServiceAdapter } from '@adapters/jwt/jwt.service';
+import { PrismaRoomRepository } from '@adapters/prisma/prisma-room.repository';
+import { PrismaTalkRepository } from '@adapters/prisma/prisma-talk.repository';
+import { PrismaUserRepository } from '@adapters/prisma/prisma-user.repository';
+import { PrismaService } from '@adapters/prisma/prisma.service';
+import { RoomRepository } from '@core/domain/repository/room.repository';
+import { TalkRepository } from '@core/domain/repository/talk.repository';
+import { UserRepository } from '@core/domain/repository/user.repository';
+import { TokenService } from '@core/domain/service/token.service';
+import { ApproveOrRejectTalkUseCase } from '@core/usecases/approve-or-reject-talk-use.case';
+import { CreateRoomUseCase } from '@core/usecases/create-room.use-case';
+import { CreateTalkCreationRequestUseCase } from '@core/usecases/create-talk-creation-request.use-case';
+import { CreateUserUseCase } from '@core/usecases/create-user.use-case';
+import { GetAllRoomsUseCase } from '@core/usecases/get-all-rooms.use-case';
+import { GetAllTalksByStatusUseCase } from '@core/usecases/get-all-talks-by-status.use-case';
+import { HelloWorldUseCase } from '@core/usecases/hello-world.use-case';
+import { LoginUseCase } from '@core/usecases/login.use-case';
 
 @Module({
   imports: [JwtModule.register({})],

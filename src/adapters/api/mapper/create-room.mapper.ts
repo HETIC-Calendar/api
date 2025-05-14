@@ -1,7 +1,7 @@
-import { CreateRoomRequest } from '../request/create-room.request';
-import { CreateRoomCommand } from '../../../core/usecases/create-room.use-case';
-import { CreateRoomResponse } from '../response/create-room.response';
-import { Room } from '../../../core/domain/model/Room';
+import { CreateRoomRequest } from '@adapters/api/request/create-room.request';
+import { CreateRoomResponse } from '@adapters/api/response/create-room.response';
+import { Room } from '@core/domain/model/Room';
+import { CreateRoomCommand } from '@core/usecases/create-room.use-case';
 
 export class CreateRoomMapper {
   static toDomain(request: CreateRoomRequest): CreateRoomCommand {

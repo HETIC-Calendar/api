@@ -1,9 +1,9 @@
-import { EntityMapper } from '../../../core/base/entity-mapper';
-import { Talk } from '../../../core/domain/model/Talk';
 import { Talk as TalkEntity, $Enums } from '@prisma/client';
-import { TalkSubject } from '../../../core/domain/type/TalkSubject';
-import { TalkStatus } from '../../../core/domain/type/TalkStatus';
-import { TalkLevel } from '../../../core/domain/type/TalkLevel';
+import { EntityMapper } from '@core/base/entity-mapper';
+import { TalkLevel } from '@core/domain/type/TalkLevel';
+import { TalkStatus } from '@core/domain/type/TalkStatus';
+import { TalkSubject } from '@core/domain/type/TalkSubject';
+import { Talk } from '@/core/domain/model/Talk';
 
 export class PrismaTalkMapper implements EntityMapper<Talk, TalkEntity> {
   fromDomain(model: Talk): TalkEntity {

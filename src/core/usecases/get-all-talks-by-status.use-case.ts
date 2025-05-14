@@ -1,7 +1,7 @@
-import { UseCase } from '../base/use-case';
-import { Talk } from '../domain/model/Talk';
-import { TalkRepository } from '../domain/repository/talk.repository';
-import { TalkStatus } from '../domain/type/TalkStatus';
+import { UseCase } from '@core/base/use-case';
+import { Talk } from '@core/domain/model/Talk';
+import { TalkRepository } from '@core/domain/repository/talk.repository';
+import { TalkStatus } from '@core/domain/type/TalkStatus';
 
 export type GetAllTalksByStatusCommand = {
   status?: TalkStatus;

@@ -1,11 +1,11 @@
-import { UseCase } from '../base/use-case';
-import { RoomRepository } from '../domain/repository/room.repository';
-import { Room } from '../domain/model/Room';
+import { UseCase } from '@core/base/use-case';
+import { Room } from '@core/domain/model/Room';
+import { RoomRepository } from '@core/domain/repository/room.repository';
 
 export class GetAllRoomsUseCase implements UseCase<void, Room[]> {
   constructor(private readonly roomRepository: RoomRepository) {}
 
   async execute(): Promise<Room[]> {
-    return await this.roomRepository.findAll();
+    return this.roomRepository.findAll();
   }
 }

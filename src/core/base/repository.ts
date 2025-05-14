@@ -1,4 +1,4 @@
-import { DomainModel } from './domain-model';
+import { DomainModel } from '@core/base/domain-model';
 
 export abstract class Repository<TEntity extends DomainModel> {
   abstract create(data: Partial<TEntity>): Promise<TEntity> | TEntity;

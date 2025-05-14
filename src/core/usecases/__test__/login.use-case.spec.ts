@@ -1,9 +1,9 @@
-import { LoginCommand, LoginUseCase } from '../login.use-case';
-import { UserRepository } from '../../domain/repository/user.repository';
-import { InMemoryUserRepository } from '../../../adapters/in-memory/in-memory-user.repository copy';
 import bcrypt from 'bcryptjs';
-import { TokenService } from '../../domain/service/token.service';
-import { User } from '../../domain/model/User';
+import { InMemoryUserRepository } from '@adapters/in-memory/in-memory-user.repository';
+import { User } from '@core/domain/model/User';
+import { UserRepository } from '@core/domain/repository/user.repository';
+import { TokenService } from '@core/domain/service/token.service';
+import { LoginCommand, LoginUseCase } from '@core/usecases/login.use-case';
 
 describe('LoginUseCase', () => {
   let userRepository: UserRepository;
@@ -52,6 +52,7 @@ describe('LoginUseCase', () => {
 
     // Then
     expect(result).toEqual('mocked-jwt-token');
+
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(tokenService.generateToken).toHaveBeenCalledWith({
       id: user.id,

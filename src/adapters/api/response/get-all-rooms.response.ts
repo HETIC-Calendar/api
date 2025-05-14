@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CreateRoomResponse } from './create-room.response';
+import { CreateRoomResponse } from '@adapters/api/response/create-room.response';
 
 export class GetAllRoomsResponse {
   @ApiProperty({ type: [CreateRoomResponse] })

@@ -1,6 +1,6 @@
-import { UseCase } from '../base/use-case';
-import { RoomRepository } from '../domain/repository/room.repository';
-import { Room } from '../domain/model/Room';
+import { UseCase } from '@core/base/use-case';
+import { Room } from '@core/domain/model/Room';
+import { RoomRepository } from '@core/domain/repository/room.repository';
 
 export type CreateRoomCommand = {
   name: string;
@@ -12,6 +12,6 @@ export class CreateRoomUseCase implements UseCase<CreateRoomCommand, Room> {
 
   async execute(command: CreateRoomCommand): Promise<Room> {
     const room = new Room(crypto.randomUUID(), command.name, command.capacity);
-    return await this.roomRepository.create(room);
+    return this.roomRepository.create(room);
   }
 }

@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { HelloWorldUseCase } from '../../../core/usecases/hello-world.use-case';
-import { HelloWorldMapper } from '../mapper/hello-world.mapper';
-import { HelloWorldRequest } from '../request/hello-world.request';
+import { HelloWorldMapper } from '@adapters/api/mapper/hello-world.mapper';
+import { HelloWorldRequest } from '@adapters/api/request/hello-world.request';
+import { HelloWorldUseCase } from '@core/usecases/hello-world.use-case';
 
 @Controller()
 export class HelloWorldController {

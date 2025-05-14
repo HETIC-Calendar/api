@@ -1,13 +1,13 @@
-import { UseCase } from '../base/use-case';
-import { Talk } from '../domain/model/Talk';
-import { TalkRepository } from '../domain/repository/talk.repository';
-import { InvalidTalkTimeError } from '../domain/error/InvalidTalkTimeError';
-import { TalkOverlapError } from '../domain/error/TalkOverlapError';
-import { RoomRepository } from '../domain/repository/room.repository';
-import { RoomNotFoundError } from '../domain/error/RoomNotFoundError';
-import { TalkSubject } from '../domain/type/TalkSubject';
-import { TalkStatus } from '../domain/type/TalkStatus';
-import { TalkLevel } from '../domain/type/TalkLevel';
+import { UseCase } from '@core/base/use-case';
+import { InvalidTalkTimeError } from '@core/domain/error/InvalidTalkTimeError';
+import { RoomNotFoundError } from '@core/domain/error/RoomNotFoundError';
+import { TalkOverlapError } from '@core/domain/error/TalkOverlapError';
+import { Talk } from '@core/domain/model/Talk';
+import { RoomRepository } from '@core/domain/repository/room.repository';
+import { TalkRepository } from '@core/domain/repository/talk.repository';
+import { TalkLevel } from '@core/domain/type/TalkLevel';
+import { TalkStatus } from '@core/domain/type/TalkStatus';
+import { TalkSubject } from '@core/domain/type/TalkSubject';
 
 export type CreateTalkCommand = {
   title: string;

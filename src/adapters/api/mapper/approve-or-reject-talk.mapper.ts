@@ -1,5 +1,5 @@
-import { ApproveOrRejectTalkCommand } from '../../../core/usecases/approve-or-reject-talk-use.case';
-import { ApproveOrRejectTalkRequest } from '../request/approve-or-reject-talk.request';
+import { ApproveOrRejectTalkRequest } from '@adapters/api/request/approve-or-reject-talk.request';
+import { ApproveOrRejectTalkCommand } from '@core/usecases/approve-or-reject-talk-use.case';
 
 export class ApproveOrRejectTalkMapper {
   static toDomain(

@@ -1,4 +1,4 @@
-import { ProfileRequest } from '../request/profile.request';
+import { ProfileRequest } from '@adapters/api/request/profile.request';
 
 export class ProfileMapper {
   static fromDomain(user: ProfileRequest): ProfileRequest {

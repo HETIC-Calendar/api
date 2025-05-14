@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { TalkRepository } from '../../core/domain/repository/talk.repository';
-import { Talk } from '../../core/domain/model/Talk';
-import { TalkStatus } from '../../core/domain/type/TalkStatus';
+import { Talk } from '@core/domain/model/Talk';
+import { TalkStatus } from '@core/domain/type/TalkStatus';
+import { TalkRepository } from '@/core/domain/repository/talk.repository';
 
 @Injectable()
 export class InMemoryTalkRepository implements TalkRepository {

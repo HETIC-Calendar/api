@@ -1,4 +1,4 @@
-import { DomainError } from '../../base/domain-error';
+import { DomainError } from '@core/base/domain-error';
 
 export class WrongEmailFormatError extends DomainError {
   constructor(email: string) {

@@ -1,10 +1,10 @@
-import { UseCase } from '../base/use-case';
-import { UserAlreadyExistsError } from '../domain/error/UserAlreadyExistsError';
-import { WrongEmailFormatError } from '../domain/error/WrongEmailFormatError';
-import { WrongPasswordFormatError } from '../domain/error/WrongPasswordFormatError';
-import { User } from '../domain/model/User';
-import { UserRepository } from '../domain/repository/user.repository';
 import * as bcrypt from 'bcryptjs';
+import { UseCase } from '@core/base/use-case';
+import { UserAlreadyExistsError } from '@core/domain/error/UserAlreadyExistsError';
+import { WrongEmailFormatError } from '@core/domain/error/WrongEmailFormatError';
+import { WrongPasswordFormatError } from '@core/domain/error/WrongPasswordFormatError';
+import { User } from '@core/domain/model/User';
+import { UserRepository } from '@core/domain/repository/user.repository';
 
 export type CreateUserCommand = {
   email: string;

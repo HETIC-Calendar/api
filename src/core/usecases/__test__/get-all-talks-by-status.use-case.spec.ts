@@ -1,11 +1,11 @@
-import { GetAllTalksByStatusUseCase } from '../get-all-talks-by-status.use-case';
-import { InMemoryTalkRepository } from '../../../adapters/in-memory/in-memory-talk.repository';
-import { TalkRepository } from '../../domain/repository/talk.repository';
-import { TalkStatus } from '../../domain/type/TalkStatus';
-import { TalkSubject } from '../../domain/type/TalkSubject';
-import { RoomRepository } from '../../domain/repository/room.repository';
-import { InMemoryRoomRepository } from '../../../adapters/in-memory/in-memory-room.repository';
-import { TalkLevel } from '../../domain/type/TalkLevel';
+import { InMemoryRoomRepository } from '@adapters/in-memory/in-memory-room.repository';
+import { InMemoryTalkRepository } from '@adapters/in-memory/in-memory-talk.repository';
+import { RoomRepository } from '@core/domain/repository/room.repository';
+import { TalkLevel } from '@core/domain/type/TalkLevel';
+import { TalkStatus } from '@core/domain/type/TalkStatus';
+import { TalkSubject } from '@core/domain/type/TalkSubject';
+import { GetAllTalksByStatusUseCase } from '@core/usecases/get-all-talks-by-status.use-case';
+import { TalkRepository } from '@/core/domain/repository/talk.repository';
 
 describe('GetAllTalksByStatusUseCase', () => {
   let talkRepository: TalkRepository;

@@ -1,7 +1,7 @@
-import { DomainModel } from '../../base/domain-model';
-import { TalkStatus } from '../type/TalkStatus';
-import { TalkLevel } from '../type/TalkLevel';
-import { TalkSubject } from '../type/TalkSubject';
+import { DomainModel } from '@core/base/domain-model';
+import { TalkLevel } from '@core/domain/type/TalkLevel';
+import { TalkStatus } from '@core/domain/type/TalkStatus';
+import { TalkSubject } from '@core/domain/type/TalkSubject';
 
 export class Talk extends DomainModel {
   status: TalkStatus;

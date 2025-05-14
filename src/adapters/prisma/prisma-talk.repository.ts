@@ -1,9 +1,9 @@
-import { TalkRepository } from '../../core/domain/repository/talk.repository';
-import { Talk } from '../../core/domain/model/Talk';
-import { PrismaService } from './prisma.service';
-import { PrismaTalkMapper } from './mapper/prisma-talk.mapper';
 import { Injectable } from '@nestjs/common';
-import { TalkStatus } from '../../core/domain/type/TalkStatus';
+import { PrismaTalkMapper } from '@adapters/prisma/mapper/prisma-talk.mapper';
+import { PrismaService } from '@adapters/prisma/prisma.service';
+import { Talk } from '@core/domain/model/Talk';
+import { TalkRepository } from '@core/domain/repository/talk.repository';
+import { TalkStatus } from '@core/domain/type/TalkStatus';
 
 @Injectable()
 export class PrismaTalkRepository implements TalkRepository {

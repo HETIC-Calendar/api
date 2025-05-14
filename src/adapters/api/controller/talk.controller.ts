@@ -7,10 +7,6 @@ import {
   Get,
   Query,
 } from '@nestjs/common';
-import { CreateTalkCreationRequestUseCase } from '../../../core/usecases/create-talk-creation-request.use-case';
-import { ApproveOrRejectTalkUseCase } from '../../../core/usecases/approve-or-reject-talk-use.case';
-import { CreateTalkRequest } from '../request/create-talk.request';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -23,14 +19,18 @@ import {
   ApiQuery,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { CreateTalkResponse } from '../response/create-talk.response';
-import { ApproveOrRejectTalkMapper } from '../mapper/approve-or-reject-talk.mapper';
-import { ApproveOrRejectTalkRequest } from '../request/approve-or-reject-talk.request';
-import { CreateTalkMapper } from '../mapper/create-talk.mapper';
-import { GetAllTalksByStatusRequest } from '../request/get-all-talks-by-status.request';
-import { GetAllTalksByStatusUseCase } from '../../../core/usecases/get-all-talks-by-status.use-case';
-import { TalkStatus } from '../../../core/domain/type/TalkStatus';
-import { GetAllTalksResponse } from '../response/get-all-talks.response';
+import { JwtAuthGuard } from '@adapters/api/guards/jwt-auth.guard';
+import { ApproveOrRejectTalkMapper } from '@adapters/api/mapper/approve-or-reject-talk.mapper';
+import { CreateTalkMapper } from '@adapters/api/mapper/create-talk.mapper';
+import { ApproveOrRejectTalkRequest } from '@adapters/api/request/approve-or-reject-talk.request';
+import { CreateTalkRequest } from '@adapters/api/request/create-talk.request';
+import { GetAllTalksByStatusRequest } from '@adapters/api/request/get-all-talks-by-status.request';
+import { CreateTalkResponse } from '@adapters/api/response/create-talk.response';
+import { GetAllTalksResponse } from '@adapters/api/response/get-all-talks.response';
+import { TalkStatus } from '@core/domain/type/TalkStatus';
+import { ApproveOrRejectTalkUseCase } from '@core/usecases/approve-or-reject-talk-use.case';
+import { CreateTalkCreationRequestUseCase } from '@core/usecases/create-talk-creation-request.use-case';
+import { GetAllTalksByStatusUseCase } from '@core/usecases/get-all-talks-by-status.use-case';
 
 @Controller('/talks')
 export class TalkController {

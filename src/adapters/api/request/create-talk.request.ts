@@ -1,6 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { TalkLevel } from '../../../core/domain/type/TalkLevel';
-import { TalkSubject } from '../../../core/domain/type/TalkSubject';
 import {
   IsDateString,
   IsEnum,
@@ -9,6 +7,8 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { TalkLevel } from '@core/domain/type/TalkLevel';
+import { TalkSubject } from '@core/domain/type/TalkSubject';
 
 export class CreateTalkRequest {
   @ApiProperty()

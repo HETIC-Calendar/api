@@ -1,9 +1,9 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { DomainErrorFilter } from './config/domain-error.filter';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference';
-import { ValidationPipe } from '@nestjs/common';
+import { AppModule } from '@/app.module';
+import { DomainErrorFilter } from '@/config/domain-error.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

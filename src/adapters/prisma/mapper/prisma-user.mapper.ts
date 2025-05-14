@@ -1,7 +1,7 @@
-import { EntityMapper } from '../../../core/base/entity-mapper';
-import { User } from '../../../core/domain/model/User';
-import { User as UserEntity } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
+import { User as UserEntity } from '@prisma/client';
+import { EntityMapper } from '@core/base/entity-mapper';
+import { User } from '@core/domain/model/User';
 
 @Injectable()
 export class PrismaUserMapper implements EntityMapper<User, UserEntity> {

@@ -1,15 +1,15 @@
-import { TalkRepository } from '../../domain/repository/talk.repository';
+import { InMemoryRoomRepository } from '@adapters/in-memory/in-memory-room.repository';
+import { InMemoryTalkRepository } from '@adapters/in-memory/in-memory-talk.repository';
+import { RoomNotFoundError } from '@core/domain/error/RoomNotFoundError';
+import { RoomRepository } from '@core/domain/repository/room.repository';
+import { TalkRepository } from '@core/domain/repository/talk.repository';
+import { TalkLevel } from '@core/domain/type/TalkLevel';
+import { TalkStatus } from '@core/domain/type/TalkStatus';
+import { TalkSubject } from '@core/domain/type/TalkSubject';
 import {
   CreateTalkCommand,
   CreateTalkCreationRequestUseCase,
-} from '../create-talk-creation-request.use-case';
-import { InMemoryTalkRepository } from '../../../adapters/in-memory/in-memory-talk.repository';
-import { InMemoryRoomRepository } from '../../../adapters/in-memory/in-memory-room.repository';
-import { RoomRepository } from '../../domain/repository/room.repository';
-import { RoomNotFoundError } from '../../domain/error/RoomNotFoundError';
-import { TalkSubject } from '../../domain/type/TalkSubject';
-import { TalkStatus } from '../../domain/type/TalkStatus';
-import { TalkLevel } from '../../domain/type/TalkLevel';
+} from '@core/usecases/create-talk-creation-request.use-case';
 
 describe('CreateTalkCreationRequestUseCase', () => {
   let talkRepository: TalkRepository;

@@ -1,11 +1,4 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { CreateRoomUseCase } from '../../../core/usecases/create-room.use-case';
-import { CreateRoomRequest } from '../request/create-room.request';
-import { CreateRoomMapper } from '../mapper/create-room.mapper';
-import { GetAllRoomsUseCase } from '../../../core/usecases/get-all-rooms.use-case';
-import { CreateRoomResponse } from '../response/create-room.response';
-import { GetAllRoomsResponse } from '../response/get-all-rooms.response';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -16,6 +9,13 @@ import {
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from '@adapters/api/guards/jwt-auth.guard';
+import { CreateRoomMapper } from '@adapters/api/mapper/create-room.mapper';
+import { CreateRoomRequest } from '@adapters/api/request/create-room.request';
+import { CreateRoomResponse } from '@adapters/api/response/create-room.response';
+import { GetAllRoomsResponse } from '@adapters/api/response/get-all-rooms.response';
+import { CreateRoomUseCase } from '@core/usecases/create-room.use-case';
+import { GetAllRoomsUseCase } from '@core/usecases/get-all-rooms.use-case';
 
 @Controller('/rooms')
 export class RoomController {

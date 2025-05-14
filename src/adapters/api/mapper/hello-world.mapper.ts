@@ -1,5 +1,5 @@
-import { HelloWorldCommand } from '../../../core/usecases/hello-world.use-case';
-import { HelloWorldRequest } from '../request/hello-world.request';
+import { HelloWorldRequest } from '@adapters/api/request/hello-world.request';
+import { HelloWorldCommand } from '@core/usecases/hello-world.use-case';
 
 export class HelloWorldMapper {
   static toDomain(request: HelloWorldRequest): HelloWorldCommand {

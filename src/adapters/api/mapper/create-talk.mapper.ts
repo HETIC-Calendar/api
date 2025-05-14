@@ -1,7 +1,7 @@
-import { CreateTalkCommand } from '../../../core/usecases/create-talk-creation-request.use-case';
-import { CreateTalkRequest } from '../request/create-talk.request';
-import { CreateTalkResponse } from '../response/create-talk.response';
-import { Talk } from '../../../core/domain/model/Talk';
+import { CreateTalkRequest } from '@adapters/api/request/create-talk.request';
+import { CreateTalkResponse } from '@adapters/api/response/create-talk.response';
+import { Talk } from '@core/domain/model/Talk';
+import { CreateTalkCommand } from '@/core/usecases/create-talk-creation-request.use-case';
 
 export class CreateTalkMapper {
   static toDomain(request: CreateTalkRequest): CreateTalkCommand {

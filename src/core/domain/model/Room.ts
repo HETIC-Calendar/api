@@ -1,4 +1,4 @@
-import { DomainModel } from '../../base/domain-model';
+import { DomainModel } from '@core/base/domain-model';
 
 export class Room extends DomainModel {
   name: string;

@@ -1,8 +1,8 @@
-import { UseCase } from '../base/use-case';
-import { TalkRepository } from '../domain/repository/talk.repository';
-import { TalkStatus } from '../domain/type/TalkStatus';
-import { TalkAlreadyApprovedOrRejectedError } from '../domain/error/TalkAlreadyApprovedOrRejectedError';
-import { TalkNotFoundError } from '../domain/error/TalkNotFoundError';
+import { UseCase } from '@core/base/use-case';
+import { TalkAlreadyApprovedOrRejectedError } from '@core/domain/error/TalkAlreadyApprovedOrRejectedError';
+import { TalkNotFoundError } from '@core/domain/error/TalkNotFoundError';
+import { TalkRepository } from '@core/domain/repository/talk.repository';
+import { TalkStatus } from '@core/domain/type/TalkStatus';
 
 export type ApproveOrRejectTalkCommand = {
   talkId: string;

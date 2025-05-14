@@ -18,6 +18,15 @@
     /* If transpiling with TypeScript: */
     "module": "commonjs",
     "outDir": "dist",
-    "sourceMap": true
+    "sourceMap": true,
+
+    /* Alias */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@adapters/*": ["src/adapters/*"],
+      "@config/*": ["src/core/*"],
+      "@core/*": ["src/core/*"]
+    }
   }
 }

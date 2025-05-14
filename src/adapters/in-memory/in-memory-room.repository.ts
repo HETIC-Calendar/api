@@ -1,6 +1,6 @@
-import { RoomRepository } from '../../core/domain/repository/room.repository';
-import { Room } from '../../core/domain/model/Room';
 import { Injectable } from '@nestjs/common';
+import { Room } from '@core/domain/model/Room';
+import { RoomRepository } from '@core/domain/repository/room.repository';
 
 @Injectable()
 export class InMemoryRoomRepository implements RoomRepository {

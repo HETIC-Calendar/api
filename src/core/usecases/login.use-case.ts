@@ -1,8 +1,8 @@
-import { UseCase } from '../base/use-case';
-import { UserNotFoundError } from '../domain/error/UserNotFoundError';
-import { UserRepository } from '../domain/repository/user.repository';
-import { TokenService } from '../domain/service/token.service';
 import * as bcrypt from 'bcryptjs';
+import { UseCase } from '@core/base/use-case';
+import { UserNotFoundError } from '@core/domain/error/UserNotFoundError';
+import { UserRepository } from '@core/domain/repository/user.repository';
+import { TokenService } from '@core/domain/service/token.service';
 
 export type LoginCommand = {
   email: string;
@@ -28,12 +28,10 @@ export class LoginUseCase implements UseCase<LoginCommand, string> {
       throw new UserNotFoundError(email);
     }
 
-    const token = this.tokenService.generateToken({
+    return this.tokenService.generateToken({
       id: user.id,
       email: user.email,
     });
-
-    return token;
   }
 
   private async verifyPassword(

@@ -1,12 +1,12 @@
-import { TalkRepository } from '../../domain/repository/talk.repository';
-import { InMemoryTalkRepository } from '../../../adapters/in-memory/in-memory-talk.repository';
-import { TalkSubject } from '../../domain/type/TalkSubject';
-import { TalkStatus } from '../../domain/type/TalkStatus';
-import { ApproveOrRejectTalkUseCase } from '../approve-or-reject-talk-use.case';
-import { RoomRepository } from '../../domain/repository/room.repository';
-import { InMemoryRoomRepository } from '../../../adapters/in-memory/in-memory-room.repository';
-import { TalkAlreadyApprovedOrRejectedError } from '../../domain/error/TalkAlreadyApprovedOrRejectedError';
-import { TalkNotFoundError } from '../../domain/error/TalkNotFoundError';
+import { InMemoryRoomRepository } from '@adapters/in-memory/in-memory-room.repository';
+import { InMemoryTalkRepository } from '@adapters/in-memory/in-memory-talk.repository';
+import { TalkAlreadyApprovedOrRejectedError } from '@core/domain/error/TalkAlreadyApprovedOrRejectedError';
+import { TalkNotFoundError } from '@core/domain/error/TalkNotFoundError';
+import { RoomRepository } from '@core/domain/repository/room.repository';
+import { TalkRepository } from '@core/domain/repository/talk.repository';
+import { TalkStatus } from '@core/domain/type/TalkStatus';
+import { TalkSubject } from '@core/domain/type/TalkSubject';
+import { ApproveOrRejectTalkUseCase } from '@core/usecases/approve-or-reject-talk-use.case';
 
 describe('ApproveOrRejectTalkUseCase', () => {
   let talkRepository: TalkRepository;

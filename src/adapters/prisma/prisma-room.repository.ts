@@ -1,8 +1,8 @@
-import { RoomRepository } from '../../core/domain/repository/room.repository';
-import { Room } from '../../core/domain/model/Room';
-import { PrismaService } from './prisma.service';
-import { PrismaRoomMapper } from './mapper/prisma-room.mapper';
 import { Injectable } from '@nestjs/common';
+import { PrismaRoomMapper } from '@adapters/prisma/mapper/prisma-room.mapper';
+import { PrismaService } from '@adapters/prisma/prisma.service';
+import { Room } from '@core/domain/model/Room';
+import { RoomRepository } from '@core/domain/repository/room.repository';
 
 @Injectable()
 export class PrismaRoomRepository implements RoomRepository {

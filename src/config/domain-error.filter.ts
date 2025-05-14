@@ -4,17 +4,17 @@ import {
   ArgumentsHost,
   HttpStatus,
 } from '@nestjs/common';
-import { NameRequiredError } from '../core/domain/error/NameRequiredError';
-import { DomainError } from '../core/base/domain-error';
-import { RoomNotFoundError } from '../core/domain/error/RoomNotFoundError';
-import { InvalidTalkTimeError } from '../core/domain/error/InvalidTalkTimeError';
-import { TalkOverlapError } from '../core/domain/error/TalkOverlapError';
-import { UserNotFoundError } from '../core/domain/error/UserNotFoundError';
-import { UserAlreadyExistsError } from '../core/domain/error/UserAlreadyExistsError';
-import { WrongEmailFormatError } from '../core/domain/error/WrongEmailFormatError';
-import { WrongPasswordFormatError } from '../core/domain/error/WrongPasswordFormatError';
-import { TalkAlreadyApprovedOrRejectedError } from '../core/domain/error/TalkAlreadyApprovedOrRejectedError';
-import { TalkNotFoundError } from '../core/domain/error/TalkNotFoundError';
+import { InvalidTalkTimeError } from '@core/domain/error/InvalidTalkTimeError';
+import { NameRequiredError } from '@core/domain/error/NameRequiredError';
+import { RoomNotFoundError } from '@core/domain/error/RoomNotFoundError';
+import { TalkAlreadyApprovedOrRejectedError } from '@core/domain/error/TalkAlreadyApprovedOrRejectedError';
+import { TalkNotFoundError } from '@core/domain/error/TalkNotFoundError';
+import { TalkOverlapError } from '@core/domain/error/TalkOverlapError';
+import { UserAlreadyExistsError } from '@core/domain/error/UserAlreadyExistsError';
+import { UserNotFoundError } from '@core/domain/error/UserNotFoundError';
+import { WrongEmailFormatError } from '@core/domain/error/WrongEmailFormatError';
+import { DomainError } from '@/core/base/domain-error';
+import { WrongPasswordFormatError } from '@/core/domain/error/WrongPasswordFormatError';
 
 @Catch(DomainError)
 export class DomainErrorFilter implements ExceptionFilter {

@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { TalkStatus } from '../../../core/domain/type/TalkStatus';
-import { TalkSubject } from '../../../core/domain/type/TalkSubject';
-import { TalkLevel } from '../../../core/domain/type/TalkLevel';
+import { TalkLevel } from '@core/domain/type/TalkLevel';
+import { TalkStatus } from '@core/domain/type/TalkStatus';
+import { TalkSubject } from '@core/domain/type/TalkSubject';
 
 export class CreateTalkResponse {
   @ApiProperty()

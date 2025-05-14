@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CreateTalkResponse } from './create-talk.response';
+import { CreateTalkResponse } from '@adapters/api/response/create-talk.response';
 
 export class GetAllTalksResponse {
   @ApiProperty({ type: [CreateTalkResponse] })

@@ -1,6 +1,6 @@
 import { LoginCommand, LoginUseCase } from '../login.use-case';
 import { UserRepository } from '../../domain/repository/user.repository';
-import { InMemoryUserRepository } from '../../../adapters/in-memory/in-memory-user.repository copy';
+import { InMemoryUserRepository } from '../../../adapters/in-memory/in-memory-user.repository';
 import bcrypt from 'bcryptjs';
 import { TokenService } from '../../domain/service/token.service';
 import { User } from '../../domain/model/User';

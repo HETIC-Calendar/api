@@ -1,6 +1,6 @@
 import { CreateUserUseCase, CreateUserCommand } from '../create-user.use-case';
 import { UserRepository } from '../../domain/repository/user.repository';
-import { InMemoryUserRepository } from '../../../adapters/in-memory/in-memory-user.repository copy';
+import { InMemoryUserRepository } from '../../../adapters/in-memory/in-memory-user.repository';
 
 describe('CreateUserUseCase', () => {
   let userRepository: UserRepository;

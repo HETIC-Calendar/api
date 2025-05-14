@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CreateRoomUseCase } from '../../../core/usecases/create-room.use-case';
 import { CreateRoomRequest } from '../request/create-room.request';
-import { RoomMapper } from '../mapper/create-room.mapper';
+import { CreateRoomMapper } from '../mapper/create-room.mapper';
 import { GetAllRoomsUseCase } from '../../../core/usecases/get-all-rooms.use-case';
 import {
   ApiBadRequestResponse,
@@ -45,9 +45,9 @@ export class RoomController {
   async createRoom(
     @Body() body: CreateRoomRequest,
   ): Promise<CreateRoomResponse> {
-    const command = RoomMapper.toDomain(body);
+    const command = CreateRoomMapper.toDomain(body);
     const room = await this.createRoomUseCase.execute(command);
-    return RoomMapper.fromDomain(room);
+    return CreateRoomMapper.fromDomain(room);
   }
 
   @Get()
@@ -56,16 +56,13 @@ export class RoomController {
     description: 'List of all rooms',
     type: GetAllRoomsResponse,
   })
-  @ApiNotFoundResponse({
-    description: 'No rooms found',
-  })
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
   })
   async getAllRooms(): Promise<GetAllRoomsResponse> {
     const rooms = await this.getAllRoomsUseCase.execute();
     return new GetAllRoomsResponse(
-      rooms.map((room) => RoomMapper.fromDomain(room)),
+      rooms.map((room) => CreateRoomMapper.fromDomain(room)),
     );
   }
 }

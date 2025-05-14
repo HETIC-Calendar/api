@@ -1,7 +1,7 @@
 import { DomainModel } from './domain-model';
 
 export abstract class Repository<TEntity extends DomainModel> {
-  abstract create(data: TEntity): Promise<TEntity>;
+  abstract create(data: Partial<TEntity>): Promise<TEntity> | TEntity;
   abstract findAll(filter?: Partial<TEntity>): Promise<TEntity[]> | TEntity[];
   abstract findById(id: string): Promise<TEntity | null> | TEntity | null;
   abstract update(

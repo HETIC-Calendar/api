@@ -7,6 +7,7 @@ import { RoomRepository } from '../domain/repository/room.repository';
 import { RoomNotFoundError } from '../domain/error/RoomNotFoundError';
 import { TalkSubject } from '../domain/type/TalkSubject';
 import { TalkStatus } from '../domain/type/TalkStatus';
+import { TalkLevel } from '../domain/type/TalkLevel';
 
 export type CreateTalkCommand = {
   title: string;
@@ -14,6 +15,7 @@ export type CreateTalkCommand = {
   description: string;
   speaker: string;
   roomId: string;
+  level: TalkLevel;
   startTime: Date;
   endTime: Date;
 };
@@ -74,6 +76,7 @@ export class CreateTalkCreationRequestUseCase
       command.description,
       command.speaker,
       command.roomId,
+      command.level,
       command.startTime,
       command.endTime,
     );

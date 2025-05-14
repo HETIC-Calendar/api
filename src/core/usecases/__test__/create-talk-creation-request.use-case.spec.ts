@@ -9,6 +9,7 @@ import { RoomRepository } from '../../domain/repository/room.repository';
 import { RoomNotFoundError } from '../../domain/error/RoomNotFoundError';
 import { TalkSubject } from '../../domain/type/TalkSubject';
 import { TalkStatus } from '../../domain/type/TalkStatus';
+import { TalkLevel } from '../../domain/type/TalkLevel';
 
 describe('CreateTalkCreationRequestUseCase', () => {
   let talkRepository: TalkRepository;
@@ -47,6 +48,7 @@ describe('CreateTalkCreationRequestUseCase', () => {
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
       speaker: 'John Doe',
       roomId: 'room-1',
+      level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:00:00Z'),
       endTime: new Date('2023-10-01T11:00:00Z'),
     };
@@ -67,6 +69,7 @@ describe('CreateTalkCreationRequestUseCase', () => {
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
       speaker: 'John Doe',
       roomId: 'room-1',
+      level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:00:00Z'),
       endTime: new Date('2023-10-01T11:00:00Z'),
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -85,6 +88,7 @@ describe('CreateTalkCreationRequestUseCase', () => {
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
       speaker: 'John Doe',
       roomId: 'room-1',
+      level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:00:00Z'),
       endTime: new Date('2023-10-01T11:00:00Z'),
     };
@@ -110,6 +114,7 @@ describe('CreateTalkCreationRequestUseCase', () => {
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
       speaker: 'John Doe',
       roomId: 'room-1',
+      level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T11:00:00Z'),
       endTime: new Date('2023-10-01T10:00:00Z'),
     };
@@ -132,6 +137,7 @@ describe('CreateTalkCreationRequestUseCase', () => {
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
       speaker: 'John Doe',
       roomId: 'room-1',
+      level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T08:00:00Z'),
       endTime: new Date('2023-10-01T10:00:00Z'),
     };
@@ -162,6 +168,7 @@ describe('CreateTalkCreationRequestUseCase', () => {
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
       speaker: 'John Doe',
       roomId: 'room-1',
+      level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:00:00Z'),
       endTime: new Date('2023-10-01T11:00:00Z'),
     };
@@ -174,6 +181,7 @@ describe('CreateTalkCreationRequestUseCase', () => {
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
       speaker: 'John Doe',
       roomId: 'room-1',
+      level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:30:00Z'),
       endTime: new Date('2023-10-01T11:30:00Z'),
     };

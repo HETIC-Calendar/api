@@ -1,0 +1,5 @@
+-- CreateEnum
+CREATE TYPE "TalkLevel" AS ENUM ('BEGINNER', 'INTERMEDIATE', 'ADVANCED');
+
+-- AlterTable
+ALTER TABLE "Talk" ADD COLUMN     "level" "TalkLevel" NOT NULL DEFAULT 'INTERMEDIATE';

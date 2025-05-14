@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { TalkStatus } from '../../../core/domain/type/TalkStatus';
 import { TalkSubject } from '../../../core/domain/type/TalkSubject';
+import { TalkLevel } from '../../../core/domain/type/TalkLevel';
 
 export class CreateTalkResponse {
   @ApiProperty()
@@ -24,6 +25,9 @@ export class CreateTalkResponse {
   @ApiProperty()
   roomId: string;
 
+  @ApiProperty({ enum: TalkLevel })
+  level: TalkLevel;
+
   @ApiProperty()
   startTime: string;
 
@@ -44,6 +48,7 @@ export class CreateTalkResponse {
     description: string,
     speaker: string,
     roomId: string,
+    level: TalkLevel,
     startTime: string,
     endTime: string,
     createdAt: Date,
@@ -56,6 +61,7 @@ export class CreateTalkResponse {
     this.description = description;
     this.speaker = speaker;
     this.roomId = roomId;
+    this.level = level;
     this.startTime = startTime;
     this.endTime = endTime;
     this.createdAt = createdAt;

@@ -32,6 +32,12 @@ enum TalkSubject {
   GAME_DEVELOPMENT
 }
 
+enum TalkLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
 model Room {
   id        String   @id @default(cuid())
   name      String
@@ -52,6 +58,7 @@ model Talk {
   endTime     DateTime
   roomId      String
   room        Room        @relation(fields: [roomId], references: [id])
+  level       TalkLevel   @default(INTERMEDIATE)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 }

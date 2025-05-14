@@ -1,5 +1,6 @@
 import { DomainModel } from '../../base/domain-model';
 import { TalkStatus } from '../type/TalkStatus';
+import { TalkLevel } from '../type/TalkLevel';
 import { TalkSubject } from '../type/TalkSubject';
 
 export class Talk extends DomainModel {
@@ -9,6 +10,7 @@ export class Talk extends DomainModel {
   description: string;
   speaker: string;
   roomId: string;
+  level: TalkLevel;
   startTime: Date;
   endTime: Date;
   updatedAt: Date;
@@ -22,6 +24,7 @@ export class Talk extends DomainModel {
     description: string,
     speaker: string,
     roomId: string,
+    level: TalkLevel,
     startTime: Date,
     endTime: Date,
     updatedAt?: Date,
@@ -34,6 +37,7 @@ export class Talk extends DomainModel {
     this.description = description;
     this.speaker = speaker;
     this.roomId = roomId;
+    this.level = level;
     this.startTime = startTime;
     this.endTime = endTime;
     this.updatedAt = updatedAt || new Date();

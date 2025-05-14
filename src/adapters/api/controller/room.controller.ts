@@ -17,7 +17,6 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
-@UseGuards(JwtAuthGuard)
 @Controller('/rooms')
 export class RoomController {
   constructor(
@@ -25,6 +24,26 @@ export class RoomController {
     private readonly getAllRoomsUseCase: GetAllRoomsUseCase,
   ) {}
 
+  @Get()
+  @ApiOperation({ summary: 'Get all rooms' })
+  @ApiOkResponse({
+    description: 'List of all rooms',
+    type: GetAllRoomsResponse,
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Internal server error',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized access',
+  })
+  async getAllRooms(): Promise<GetAllRoomsResponse> {
+    const rooms = await this.getAllRoomsUseCase.execute();
+    return new GetAllRoomsResponse(
+      rooms.map((room) => CreateRoomMapper.fromDomain(room)),
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post()
   @ApiOperation({ summary: 'Create a new room' })
   @ApiCreatedResponse({
@@ -54,24 +73,5 @@ export class RoomController {
     const command = CreateRoomMapper.toDomain(body);
     const room = await this.createRoomUseCase.execute(command);
     return CreateRoomMapper.fromDomain(room);
-  }
-
-  @Get()
-  @ApiOperation({ summary: 'Get all rooms' })
-  @ApiOkResponse({
-    description: 'List of all rooms',
-    type: GetAllRoomsResponse,
-  })
-  @ApiInternalServerErrorResponse({
-    description: 'Internal server error',
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Unauthorized access',
-  })
-  async getAllRooms(): Promise<GetAllRoomsResponse> {
-    const rooms = await this.getAllRoomsUseCase.execute();
-    return new GetAllRoomsResponse(
-      rooms.map((room) => CreateRoomMapper.fromDomain(room)),
-    );
   }
 }

@@ -15,7 +15,7 @@ describe('CreateUserUseCase', () => {
     expect(createUserUseCase).toBeDefined();
   });
 
-  it('should return created room', async () => {
+  it('should return created user', async () => {
     // Given
     const command: CreateUserCommand = {
       email: 'john.doe@example.com',
@@ -40,5 +40,49 @@ describe('CreateUserUseCase', () => {
       updatedAt: expect.any(Date),
     });
     expect(user.password).not.toEqual(command.password);
+  });
+
+  it('should throw UserAlreadyExistsError if user already exists', async () => {
+    // Given
+    const command: CreateUserCommand = {
+      email: 'john.doe@example.com',
+      password: 'password123',
+    };
+    await createUserUseCase.execute(command);
+    const command2: CreateUserCommand = {
+      email: 'john.doe@example.com',
+      password: 'password123',
+    };
+
+    // When & Then
+    await expect(createUserUseCase.execute(command2)).rejects.toThrow(
+      'User already exists',
+    );
+  });
+
+  it('should throw WrongEmailFormatError if email format is invalid', async () => {
+    // Given
+    const command: CreateUserCommand = {
+      email: 'invalid-email',
+      password: 'password123',
+    };
+
+    // When & Then
+    await expect(createUserUseCase.execute(command)).rejects.toThrow(
+      'Email invalid-email is not in a valid format',
+    );
+  });
+
+  it('should throw WrongPasswordFormatError if password is too short', async () => {
+    // Given
+    const command: CreateUserCommand = {
+      email: 'john.doe@example.com',
+      password: 'short',
+    };
+
+    // When & Then
+    await expect(createUserUseCase.execute(command)).rejects.toThrow(
+      'Password must be at least 8 characters long',
+    );
   });
 });

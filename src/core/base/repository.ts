@@ -9,4 +9,5 @@ export abstract class Repository<TEntity extends DomainModel> {
     data: Partial<TEntity>,
   ): Promise<TEntity | null> | TEntity | null;
   abstract remove(id: string): Promise<void> | void;
+  abstract removeAll(): Promise<void> | void;
 }

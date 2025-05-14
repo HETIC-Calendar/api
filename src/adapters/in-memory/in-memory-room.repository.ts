@@ -30,4 +30,8 @@ export class InMemoryRoomRepository implements RoomRepository {
   remove(id: string): void {
     this.rooms.delete(id);
   }
+
+  removeAll(): void {
+    this.rooms.clear();
+  }
 }

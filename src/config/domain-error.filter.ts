@@ -6,6 +6,9 @@ import {
 } from '@nestjs/common';
 import { NameRequiredError } from '../core/domain/error/NameRequiredError';
 import { DomainError } from '../core/base/domain-error';
+import { RoomNotFoundError } from '../core/domain/error/RoomNotFoundError';
+import { InvalidTalkTimeError } from '../core/domain/error/InvalidTalkTimeError';
+import { TalkOverlapError } from '../core/domain/error/TalkOverlapError';
 
 @Catch(DomainError)
 export class DomainErrorFilter implements ExceptionFilter {
@@ -25,8 +28,15 @@ export class DomainErrorFilter implements ExceptionFilter {
   }
 
   private mapErrorTypeToStatusCode(exception: DomainError): number {
-    if (exception instanceof NameRequiredError) {
+    if (
+      exception instanceof NameRequiredError ||
+      exception instanceof InvalidTalkTimeError ||
+      exception instanceof TalkOverlapError
+    ) {
       return HttpStatus.BAD_REQUEST;
+    }
+    if (exception instanceof RoomNotFoundError) {
+      return HttpStatus.NOT_FOUND;
     }
     return HttpStatus.INTERNAL_SERVER_ERROR;
   }

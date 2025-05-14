@@ -22,6 +22,7 @@ import { UserController } from './adapters/api/controller/auth.controller';
 import { UserRepository } from './core/domain/repository/user.repository';
 import { ApproveOrRejectTalkUseCase } from './core/usecases/approve-or-reject-talk-use.case';
 import { JwtAuthGuard } from './adapters/api/guards/jwt-auth.guard';
+import { GetAllTalksByStatusUseCase } from './core/usecases/get-all-talks-by-status.use-case';
 
 @Module({
   imports: [JwtModule.register({})],
@@ -83,6 +84,12 @@ import { JwtAuthGuard } from './adapters/api/guards/jwt-auth.guard';
       provide: ApproveOrRejectTalkUseCase,
       useFactory: (talkRepository: TalkRepository) =>
         new ApproveOrRejectTalkUseCase(talkRepository),
+      inject: [TalkRepository],
+    },
+    {
+      provide: GetAllTalksByStatusUseCase,
+      useFactory: (talkRepository: TalkRepository) =>
+        new GetAllTalksByStatusUseCase(talkRepository),
       inject: [TalkRepository],
     },
     {

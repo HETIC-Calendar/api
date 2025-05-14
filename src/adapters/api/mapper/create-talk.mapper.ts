@@ -47,7 +47,9 @@ export class CreateTalkMapper {
   static fromDomain(talk: Talk): CreateTalkResponse {
     return {
       id: talk.id,
+      status: talk.status,
       title: talk.title,
+      subject: talk.subject,
       description: talk.description,
       speaker: talk.speaker,
       roomId: talk.roomId,

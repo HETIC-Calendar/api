@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TalkRepository } from '../../core/domain/repository/talk.repository';
 import { Talk } from '../../core/domain/model/Talk';
+import { TalkStatus } from '../../core/domain/type/TalkStatus';
 
 @Injectable()
 export class InMemoryTalkRepository implements TalkRepository {
@@ -22,6 +23,12 @@ export class InMemoryTalkRepository implements TalkRepository {
   findByRoomId(roomId: string): Promise<Talk[]> | Talk[] {
     return Array.from(this.talks.values()).filter(
       (talk) => talk.roomId === roomId,
+    );
+  }
+
+  findByStatus(status: TalkStatus): Promise<Talk[]> | Talk[] {
+    return Array.from(this.talks.values()).filter(
+      (talk) => talk.status === status,
     );
   }
 

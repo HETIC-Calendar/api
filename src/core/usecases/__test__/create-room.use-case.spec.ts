@@ -1,6 +1,6 @@
-import { CreateRoomCommand, CreateRoomUseCase } from './create-room.use-case';
-import { RoomRepository } from '../domain/repository/room.repository';
-import { InMemoryRoomRepository } from '../../adapters/in-memory/in-memory-room.repository';
+import { CreateRoomCommand, CreateRoomUseCase } from '../create-room.use-case';
+import { RoomRepository } from '../../domain/repository/room.repository';
+import { InMemoryRoomRepository } from '../../../adapters/in-memory/in-memory-room.repository';
 
 describe('CreateRoomUseCase', () => {
   let roomRepository: RoomRepository;

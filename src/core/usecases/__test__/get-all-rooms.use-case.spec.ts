@@ -1,7 +1,7 @@
-import { GetAllRoomsUseCase } from './get-all-rooms.use-case';
-import { InMemoryRoomRepository } from '../../adapters/in-memory/in-memory-room.repository';
-import { RoomRepository } from '../domain/repository/room.repository';
-import { CreateRoomCommand, CreateRoomUseCase } from './create-room.use-case';
+import { GetAllRoomsUseCase } from '../get-all-rooms.use-case';
+import { InMemoryRoomRepository } from '../../../adapters/in-memory/in-memory-room.repository';
+import { RoomRepository } from '../../domain/repository/room.repository';
+import { CreateRoomCommand, CreateRoomUseCase } from '../create-room.use-case';
 
 describe('GetAllRoomsUseCase', () => {
   let roomRepository: RoomRepository;

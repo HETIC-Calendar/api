@@ -1,4 +1,4 @@
-import { HelloWorldCommand, HelloWorldUseCase } from './hello-world.use-case';
+import { HelloWorldCommand, HelloWorldUseCase } from '../hello-world.use-case';
 
 describe('HelloWorldUseCase', () => {
   let helloWorldUseCase: HelloWorldUseCase;

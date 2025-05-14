@@ -7,6 +7,9 @@ import { apiReference } from '@scalar/nestjs-api-reference';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new DomainErrorFilter());
+  app.enableCors({
+    origin: process.env.CORS_ORIGIN || 'http://localhost:8080',
+  });
 
   const config = new DocumentBuilder()
     .setTitle('API Documentation')

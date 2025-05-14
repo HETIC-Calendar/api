@@ -24,7 +24,7 @@ export class CreateUserUseCase implements UseCase<CreateUserCommand, User> {
       throw new WrongEmailFormatError(email);
     }
 
-    if (password.length <= this.PASSWORD_LENGTH) {
+    if (password.length < this.PASSWORD_LENGTH) {
       throw new WrongPasswordFormatError(
         `Password must be at least ${this.PASSWORD_LENGTH} characters long`,
       );

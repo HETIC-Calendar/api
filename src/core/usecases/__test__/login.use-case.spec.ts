@@ -1,9 +1,9 @@
-import { LoginCommand, LoginUseCase } from './login.use-case';
-import { UserRepository } from '../domain/repository/user.repository';
-import { InMemoryUserRepository } from '../../adapters/in-memory/in-memory-user.repository copy';
+import { LoginCommand, LoginUseCase } from '../login.use-case';
+import { UserRepository } from '../../domain/repository/user.repository';
+import { InMemoryUserRepository } from '../../../adapters/in-memory/in-memory-user.repository copy';
 import bcrypt from 'bcryptjs';
-import { TokenService } from '../domain/service/token.service';
-import { User } from '../domain/model/User';
+import { TokenService } from '../../domain/service/token.service';
+import { User } from '../../domain/model/User';
 
 describe('LoginUseCase', () => {
   let userRepository: UserRepository;

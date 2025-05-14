@@ -20,6 +20,7 @@ import { TalkRepository } from './core/domain/repository/talk.repository';
 import { TokenService } from './core/domain/service/token.service';
 import { UserController } from './adapters/api/controller/auth.controller';
 import { UserRepository } from './core/domain/repository/user.repository';
+import { ApproveOrRejectTalkUseCase } from './core/usecases/approve-or-reject-talk-use.case';
 
 @Module({
   imports: [JwtModule.register({})],
@@ -75,6 +76,12 @@ import { UserRepository } from './core/domain/repository/user.repository';
         roomRepository: RoomRepository,
       ) => new CreateTalkCreationRequestUseCase(talkRepository, roomRepository),
       inject: [TalkRepository, RoomRepository],
+    },
+    {
+      provide: ApproveOrRejectTalkUseCase,
+      useFactory: (talkRepository: TalkRepository) =>
+        new ApproveOrRejectTalkUseCase(talkRepository),
+      inject: [TalkRepository],
     },
     {
       provide: CreateUserUseCase,

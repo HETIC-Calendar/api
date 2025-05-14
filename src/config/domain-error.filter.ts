@@ -13,6 +13,8 @@ import { UserNotFoundError } from '../core/domain/error/UserNotFoundError';
 import { UserAlreadyExistsError } from '../core/domain/error/UserAlreadyExistsError';
 import { WrongEmailFormatError } from '../core/domain/error/WrongEmailFormatError';
 import { WrongPasswordFormatError } from '../core/domain/error/WrongPasswordFormatError';
+import { TalkAlreadyApprovedOrRejectedError } from '../core/domain/error/TalkAlreadyApprovedOrRejectedError';
+import { TalkNotFoundError } from '../core/domain/error/TalkNotFoundError';
 
 @Catch(DomainError)
 export class DomainErrorFilter implements ExceptionFilter {
@@ -35,24 +37,24 @@ export class DomainErrorFilter implements ExceptionFilter {
     if (
       exception instanceof NameRequiredError ||
       exception instanceof InvalidTalkTimeError ||
-      exception instanceof TalkOverlapError
+      exception instanceof TalkOverlapError ||
+      exception instanceof WrongEmailFormatError ||
+      exception instanceof WrongPasswordFormatError
     ) {
       return HttpStatus.BAD_REQUEST;
     }
-    if (exception instanceof RoomNotFoundError) {
+    if (
+      exception instanceof RoomNotFoundError ||
+      exception instanceof UserNotFoundError ||
+      exception instanceof TalkNotFoundError
+    ) {
       return HttpStatus.NOT_FOUND;
     }
-    if (exception instanceof UserNotFoundError) {
-      return HttpStatus.NOT_FOUND;
-    }
-    if (exception instanceof UserAlreadyExistsError) {
+    if (
+      exception instanceof UserAlreadyExistsError ||
+      exception instanceof TalkAlreadyApprovedOrRejectedError
+    ) {
       return HttpStatus.CONFLICT;
-    }
-    if (exception instanceof WrongEmailFormatError) {
-      return HttpStatus.BAD_REQUEST;
-    }
-    if (exception instanceof WrongPasswordFormatError) {
-      return HttpStatus.BAD_REQUEST;
     }
     return HttpStatus.INTERNAL_SERVER_ERROR;
   }

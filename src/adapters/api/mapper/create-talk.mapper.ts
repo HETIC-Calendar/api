@@ -4,7 +4,7 @@ import { TalkSubject } from '../../../core/domain/type/TalkSubject';
 import { Talk } from '../../../core/domain/model/Talk';
 import { CreateTalkResponse } from '../response/create-talk.response';
 
-export class TalkMapper {
+export class CreateTalkMapper {
   static toDomain(request: CreateTalkRequest): CreateTalkCommand {
     return {
       title: request.title,

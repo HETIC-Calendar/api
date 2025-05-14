@@ -13,6 +13,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TalkStatus {
+  PENDING_APPROVAL
+  APPROVED
+  REJECTED
+}
+
+enum TalkSubject {
+  AI
+  WEB_DEVELOPMENT
+  MOBILE_DEVELOPMENT
+  DATA_SCIENCE
+  CLOUD_COMPUTING
+  DEVOPS
+  CYBER_SECURITY
+  BLOCKCHAIN
+  IOT
+  GAME_DEVELOPMENT
+}
+
 model Room {
   id        String   @id @default(cuid())
   name      String
@@ -23,16 +42,18 @@ model Room {
 }
 
 model Talk {
-  id          String   @id @default(cuid())
+  id          String      @id @default(cuid())
+  status      TalkStatus  @default(PENDING_APPROVAL)
   title       String
+  subject     TalkSubject
   description String
   speaker     String
   startTime   DateTime
   endTime     DateTime
   roomId      String
-  room        Room     @relation(fields: [roomId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  room        Room        @relation(fields: [roomId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
 
 model User {

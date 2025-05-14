@@ -1,21 +1,29 @@
 import { TalkRepository } from '../domain/repository/talk.repository';
-import { CreateTalkCommand, CreateTalkUseCase } from './create-talk.use-case';
+import {
+  CreateTalkCommand,
+  CreateTalkCreationRequestUseCase,
+} from './create-talk-creation-request.use-case';
 import { InMemoryTalkRepository } from '../../adapters/in-memory/in-memory-talk.repository';
 import { InMemoryRoomRepository } from '../../adapters/in-memory/in-memory-room.repository';
 import { RoomRepository } from '../domain/repository/room.repository';
 import { RoomNotFoundError } from '../domain/error/RoomNotFoundError';
+import { TalkSubject } from '../domain/type/TalkSubject';
+import { TalkStatus } from '../domain/type/TalkStatus';
 
-describe('CreateTalkUseCase', () => {
+describe('CreateTalkCreationRequestUseCase', () => {
   let talkRepository: TalkRepository;
   let roomRepository: RoomRepository;
-  let createTalkUseCase: CreateTalkUseCase;
+  let createTalkUseCase: CreateTalkCreationRequestUseCase;
 
   beforeEach(async () => {
     talkRepository = new InMemoryTalkRepository();
     roomRepository = new InMemoryRoomRepository();
     await talkRepository.removeAll();
     await roomRepository.removeAll();
-    createTalkUseCase = new CreateTalkUseCase(talkRepository, roomRepository);
+    createTalkUseCase = new CreateTalkCreationRequestUseCase(
+      talkRepository,
+      roomRepository,
+    );
   });
 
   it('should be defined', () => {
@@ -34,6 +42,7 @@ describe('CreateTalkUseCase', () => {
     await roomRepository.create(roomEntity);
     const command: CreateTalkCommand = {
       title: 'La Clean Architecture pour les nuls',
+      subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
       speaker: 'John Doe',
@@ -51,7 +60,9 @@ describe('CreateTalkUseCase', () => {
     expect(talk).toEqual({
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       id: expect.any(String),
+      status: TalkStatus.PENDING_APPROVAL,
       title: 'La Clean Architecture pour les nuls',
+      subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
       speaker: 'John Doe',
@@ -69,6 +80,7 @@ describe('CreateTalkUseCase', () => {
     // Given
     const command: CreateTalkCommand = {
       title: 'La Clean Architecture pour les nuls',
+      subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
       speaker: 'John Doe',
@@ -93,6 +105,7 @@ describe('CreateTalkUseCase', () => {
     // Given
     const command: CreateTalkCommand = {
       title: 'La Clean Architecture pour les nuls',
+      subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
       speaker: 'John Doe',
@@ -114,6 +127,7 @@ describe('CreateTalkUseCase', () => {
     // Given
     const command: CreateTalkCommand = {
       title: 'La Clean Architecture pour les nuls',
+      subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
       speaker: 'John Doe',
@@ -143,6 +157,7 @@ describe('CreateTalkUseCase', () => {
     await roomRepository.create(roomEntity);
     const command1: CreateTalkCommand = {
       title: 'La Clean Architecture pour les nuls',
+      subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
       speaker: 'John Doe',
@@ -154,6 +169,7 @@ describe('CreateTalkUseCase', () => {
 
     const command2: CreateTalkCommand = {
       title: 'La Clean Architecture pour les nuls',
+      subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
       speaker: 'John Doe',

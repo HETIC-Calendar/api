@@ -1,7 +1,12 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Body, Controller, Post, Param, UseGuards } from '@nestjs/common';
 import { CreateTalkCreationRequestUseCase } from '../../../core/usecases/create-talk-creation-request.use-case';
 import { ApproveOrRejectTalkUseCase } from '../../../core/usecases/approve-or-reject-talk-use.case';
 import { CreateTalkRequest } from '../request/create-talk.request';
+import { CreateTalkResponse } from '../response/create-talk.response';
+import { ApproveOrRejectTalkMapper } from '../mapper/approve-or-reject-talk.mapper';
+import { ApproveOrRejectTalkRequest } from '../request/approve-or-reject-talk.request';
+import { CreateTalkMapper } from '../mapper/create-talk.mapper';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -10,12 +15,10 @@ import {
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOperation,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { CreateTalkResponse } from '../response/create-talk.response';
-import { ApproveOrRejectTalkMapper } from '../mapper/approve-or-reject-talk.mapper';
-import { ApproveOrRejectTalkRequest } from '../request/approve-or-reject-talk.request';
-import { CreateTalkMapper } from '../mapper/create-talk.mapper';
 
+@UseGuards(JwtAuthGuard)
 @Controller('/talks')
 export class TalkController {
   constructor(
@@ -43,6 +46,9 @@ export class TalkController {
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
   })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized access',
+  })
   async createTalk(
     @Body() body: CreateTalkRequest,
   ): Promise<CreateTalkResponse> {
@@ -65,6 +71,9 @@ export class TalkController {
   })
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized access',
   })
   async approveOrRejectTalk(
     @Param('talkId') talkId: string,

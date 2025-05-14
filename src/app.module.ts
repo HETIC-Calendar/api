@@ -21,6 +21,7 @@ import { TokenService } from './core/domain/service/token.service';
 import { UserController } from './adapters/api/controller/auth.controller';
 import { UserRepository } from './core/domain/repository/user.repository';
 import { ApproveOrRejectTalkUseCase } from './core/usecases/approve-or-reject-talk-use.case';
+import { JwtAuthGuard } from './adapters/api/guards/jwt-auth.guard';
 
 @Module({
   imports: [JwtModule.register({})],
@@ -33,6 +34,7 @@ import { ApproveOrRejectTalkUseCase } from './core/usecases/approve-or-reject-ta
   providers: [
     PrismaService,
     JwtService,
+    JwtAuthGuard,
     {
       provide: 'TokenService',
       useFactory: (jwtService: JwtService) => new JwtServiceAdapter(jwtService),

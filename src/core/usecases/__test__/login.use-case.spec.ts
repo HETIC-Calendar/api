@@ -54,7 +54,7 @@ describe('LoginUseCase', () => {
     expect(result).toEqual('mocked-jwt-token');
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(tokenService.generateToken).toHaveBeenCalledWith({
-      userId: user.id,
+      id: user.id,
       email: user.email,
     });
   });

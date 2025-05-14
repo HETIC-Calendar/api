@@ -53,8 +53,9 @@ export class CreateTalkCreationRequestUseCase
       throw new RoomNotFoundError(command.roomId);
     }
 
-    const existingTalks = await this.talkRepository.findByRoomId(
+    const existingTalks = await this.talkRepository.findByRoomIdAndStatuses(
       command.roomId,
+      [TalkStatus.PENDING_APPROVAL, TalkStatus.APPROVED],
     );
 
     for (const talk of existingTalks) {

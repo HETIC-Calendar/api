@@ -32,9 +32,15 @@ export class PrismaTalkRepository implements TalkRepository {
     return entities.map((entity) => this.mapper.toDomain(entity));
   }
 
-  async findByRoomId(roomId: string): Promise<Talk[]> {
+  async findByRoomIdAndStatuses(
+    roomId: string,
+    statuses: TalkStatus[] = [],
+  ): Promise<Talk[]> {
     const entities = await this.prisma.talk.findMany({
-      where: { roomId },
+      where: {
+        roomId,
+        status: { in: statuses },
+      },
     });
     return entities.map((entity) => this.mapper.toDomain(entity));
   }

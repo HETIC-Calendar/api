@@ -20,9 +20,12 @@ export class InMemoryTalkRepository implements TalkRepository {
     return Array.from(this.talks.values());
   }
 
-  findByRoomId(roomId: string): Promise<Talk[]> | Talk[] {
+  findByRoomIdAndStatuses(
+    roomId: string,
+    statuses: TalkStatus[] = [],
+  ): Promise<Talk[]> | Talk[] {
     return Array.from(this.talks.values()).filter(
-      (talk) => talk.roomId === roomId,
+      (talk) => talk.roomId === roomId && statuses.includes(talk.status),
     );
   }
 

@@ -153,28 +153,13 @@ describe('CreateTalkCreationRequestUseCase', () => {
 
   it('should throw error when talk overlaps with existing talk', async () => {
     // Given
-    const roomEntity = {
-      id: 'room-1',
-      name: 'Room 1',
-      capacity: 10,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    await roomRepository.create(roomEntity);
-    const command1: CreateTalkCommand = {
-      title: 'La Clean Architecture pour les nuls',
-      subject: TalkSubject.WEB_DEVELOPMENT,
-      description:
-        'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
-      roomId: 'room-1',
-      level: TalkLevel.BEGINNER,
-      startTime: new Date('2023-10-01T10:00:00Z'),
-      endTime: new Date('2023-10-01T11:00:00Z'),
-    };
-    await createTalkUseCase.execute(command1);
+    await createTalk(
+      TalkStatus.PENDING_APPROVAL,
+      new Date('2023-10-01T10:00:00Z'),
+      new Date('2023-10-01T11:00:00Z'),
+    );
 
-    const command2: CreateTalkCommand = {
+    const command: CreateTalkCommand = {
       title: 'La Clean Architecture pour les nuls',
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
@@ -187,11 +172,68 @@ describe('CreateTalkCreationRequestUseCase', () => {
     };
 
     // When
-    const execute = async () => await createTalkUseCase.execute(command2);
+    const execute = async () => await createTalkUseCase.execute(command);
 
     // Then
     await expect(execute).rejects.toThrow(
       'Talk overlap another talk in the same room.',
     );
   });
+
+  it('should not throw overlap error if existing talk is REJECTED', async () => {
+    // Given
+    await createTalk(
+      TalkStatus.REJECTED,
+      new Date('2023-10-01T10:00:00Z'),
+      new Date('2023-10-01T11:00:00Z'),
+    );
+
+    const command: CreateTalkCommand = {
+      title: 'La Clean Architecture pour les nuls',
+      subject: TalkSubject.WEB_DEVELOPMENT,
+      description:
+        'Une introduction à la Clean Architecture dans le monde TypeScript.',
+      speaker: 'John Doe',
+      roomId: 'room-1',
+      level: TalkLevel.BEGINNER,
+      startTime: new Date('2023-10-01T10:30:00Z'),
+      endTime: new Date('2023-10-01T11:30:00Z'),
+    };
+
+    // When
+    const talk = await createTalkUseCase.execute(command);
+
+    // Then
+    expect(talk).toBeDefined();
+  });
+
+  async function createTalk(
+    status: TalkStatus,
+    startTime: Date,
+    endTime: Date,
+  ): Promise<void> {
+    await roomRepository.create({
+      id: 'room-1',
+      name: 'Room 1',
+      capacity: 10,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    await talkRepository.create({
+      id: crypto.randomUUID(),
+      status,
+      title: 'La Clean Architecture pour les nuls',
+      subject: TalkSubject.WEB_DEVELOPMENT,
+      description:
+        'Une introduction à la Clean Architecture dans le monde TypeScript.',
+      speaker: 'John Doe',
+      roomId: 'room-1',
+      level: TalkLevel.BEGINNER,
+      startTime,
+      endTime,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+  }
 });

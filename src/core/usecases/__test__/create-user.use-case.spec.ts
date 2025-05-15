@@ -34,6 +34,7 @@ describe('CreateUserUseCase', () => {
       email: 'john.doe@example.com',
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       password: expect.any(String),
+      type: 'SPEAKER',
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       createdAt: expect.any(Date),
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

@@ -1,7 +1,9 @@
 import { EntityMapper } from '../../../core/base/entity-mapper';
 import { User } from '../../../core/domain/model/User';
-import { User as UserEntity } from '@prisma/client';
+import { User as UserEntity, $Enums } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
+
+import { UserType } from '../../../core/domain/type/UserType';
 
 @Injectable()
 export class PrismaUserMapper implements EntityMapper<User, UserEntity> {
@@ -10,6 +12,7 @@ export class PrismaUserMapper implements EntityMapper<User, UserEntity> {
       id: model.id,
       email: model.email,
       password: model.password,
+      type: model.type,
       updatedAt: model.updatedAt,
       createdAt: model.createdAt,
     };
@@ -20,8 +23,20 @@ export class PrismaUserMapper implements EntityMapper<User, UserEntity> {
       id: entity.id,
       email: entity.email,
       password: entity.password,
+      type: this.mapUserTypeToDomain(entity.type),
       updatedAt: entity.updatedAt,
       createdAt: entity.createdAt,
     };
+  }
+
+  private mapUserTypeToDomain(type: $Enums.UserType): UserType {
+    switch (type) {
+      case 'PLANNER':
+        return UserType.PLANNER;
+      case 'SPEAKER':
+        return UserType.SPEAKER;
+      default:
+        throw new Error('Invalid user type');
+    }
   }
 }

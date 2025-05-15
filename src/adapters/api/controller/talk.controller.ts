@@ -32,6 +32,8 @@ import { GetAllTalksByStatusUseCase } from '../../../core/usecases/get-all-talks
 import { TalkStatus } from '../../../core/domain/type/TalkStatus';
 import { GetAllTalksWithRoomDetailResponse } from '../response/get-all-talks-with-room-detail.response';
 import { GetAllTalksWithRoomDetailMapper } from '../mapper/get-all-talks-with-room-detail.mapper';
+import { UserType } from '../../../core/domain/type/UserType';
+import { Roles } from '../decorator/roles.decorator';
 
 @Controller('/talks')
 export class TalkController {
@@ -68,6 +70,7 @@ export class TalkController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
+  @Roles(UserType.PLANNER, UserType.SPEAKER)
   @ApiOperation({ summary: 'Create a new talk' })
   @ApiCreatedResponse({
     description: 'Talk successfully created',
@@ -99,6 +102,7 @@ export class TalkController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Roles(UserType.PLANNER)
   @Post('/:talkId/approve-or-reject')
   @ApiOperation({ summary: 'Accept or reject a talk' })
   @ApiNoContentResponse({

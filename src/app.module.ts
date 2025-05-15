@@ -23,6 +23,7 @@ import { ApproveOrRejectTalkUseCase } from './core/usecases/approve-or-reject-ta
 import { GetAllTalksByStatusUseCase } from './core/usecases/get-all-talks-by-status.use-case';
 import { GetRoomByIdUseCase } from './core/usecases/get-room-by-id.use-case';
 import { UpdateTalkCreationRequestUseCase } from './core/usecases/update-talk-creation-request.use-case';
+import { DeleteTalkUseCase } from './core/usecases/delete-talk.use-case';
 
 @Module({
   imports: [JwtModule.register({})],
@@ -97,6 +98,12 @@ import { UpdateTalkCreationRequestUseCase } from './core/usecases/update-talk-cr
     },
     {
       provide: ApproveOrRejectTalkUseCase,
+      useFactory: (talkRepository: TalkRepository) =>
+        new ApproveOrRejectTalkUseCase(talkRepository),
+      inject: [TalkRepository],
+    },
+    {
+      provide: DeleteTalkUseCase,
       useFactory: (talkRepository: TalkRepository) =>
         new ApproveOrRejectTalkUseCase(talkRepository),
       inject: [TalkRepository],

@@ -14,6 +14,8 @@ import { TalkNotFoundError } from '../../domain/error/TalkNotFoundError';
 import { UserType } from '../../domain/type/UserType';
 import { UserRepository } from '../../domain/repository/user.repository';
 import { InMemoryUserRepository } from '../../../adapters/in-memory/in-memory-user.repository';
+import { UserNotAllowedToUpdateTalkError } from '../../domain/error/UserNotAllowedToUpdateTalkError';
+import { TalkAlreadyApprovedOrRejectedError } from '../../domain/error/TalkAlreadyApprovedOrRejectedError';
 
 describe('UpdateTalkCreationRequestUseCase', () => {
   let talkRepository: TalkRepository;
@@ -86,6 +88,80 @@ describe('UpdateTalkCreationRequestUseCase', () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       createdAt: expect.any(Date),
     });
+  });
+
+  it('should throw error when user not allowed to update talk', async () => {
+    // Given
+    const talkId = crypto.randomUUID();
+    await createTalk(
+      talkId,
+      TalkStatus.PENDING_APPROVAL,
+      new Date('2023-10-01T10:00:00Z'),
+      new Date('2023-10-01T11:00:00Z'),
+    );
+    const command: UpdateTalkCommand = {
+      currentUser: {
+        id: 'speaker-2',
+        type: UserType.SPEAKER,
+      },
+      talkId,
+      title: 'La Clean Architecture pour les nuls',
+      subject: TalkSubject.WEB_DEVELOPMENT,
+      description:
+        'Une introduction à la Clean Architecture dans le monde TypeScript.',
+      roomId: 'room-1',
+      level: TalkLevel.BEGINNER,
+      startTime: new Date('2023-10-01T10:00:00Z'),
+      endTime: new Date('2023-10-01T11:00:00Z'),
+    };
+
+    // When
+    try {
+      await updateTalkUseCase.execute(command);
+    } catch (error) {
+      // Then
+      expect(error).toBeInstanceOf(UserNotAllowedToUpdateTalkError);
+      expect((error as Error).message).toEqual(
+        'User not allowed to update talk',
+      );
+    }
+  });
+
+  it('should throw error when talk already approved or rejected', async () => {
+    // Given
+    const talkId = crypto.randomUUID();
+    await createTalk(
+      talkId,
+      TalkStatus.APPROVED,
+      new Date('2023-10-01T10:00:00Z'),
+      new Date('2023-10-01T11:00:00Z'),
+    );
+    const command: UpdateTalkCommand = {
+      currentUser: {
+        id: 'speaker-1',
+        type: UserType.SPEAKER,
+      },
+      talkId,
+      title: 'La Clean Architecture pour les nuls',
+      subject: TalkSubject.WEB_DEVELOPMENT,
+      description:
+        'Une introduction à la Clean Architecture dans le monde TypeScript.',
+      roomId: 'room-1',
+      level: TalkLevel.BEGINNER,
+      startTime: new Date('2023-10-01T10:00:00Z'),
+      endTime: new Date('2023-10-01T11:00:00Z'),
+    };
+
+    // When
+    try {
+      await updateTalkUseCase.execute(command);
+    } catch (error) {
+      // Then
+      expect(error).toBeInstanceOf(TalkAlreadyApprovedOrRejectedError);
+      expect((error as Error).message).toEqual(
+        `Talk with ID ${talkId} is already APPROVED`,
+      );
+    }
   });
 
   it('should throw error when talk not found', async () => {

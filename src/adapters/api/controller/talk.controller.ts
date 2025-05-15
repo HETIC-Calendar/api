@@ -6,6 +6,7 @@ import {
   Get,
   Query,
   HttpCode,
+  Delete,
 } from '@nestjs/common';
 import { CreateTalkCreationRequestUseCase } from '../../../core/usecases/create-talk-creation-request.use-case';
 import { ApproveOrRejectTalkUseCase } from '../../../core/usecases/approve-or-reject-talk-use.case';
@@ -14,6 +15,7 @@ import {
   ApiBadRequestResponse,
   ApiConflictResponse,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
@@ -40,6 +42,7 @@ import { UpdateTalkCreationRequestUseCase } from '../../../core/usecases/update-
 import { UpdateTalkResponse } from '../response/update-talk.response';
 import { CurrentUser } from '../decorator/current-user.decorator';
 import { ProfileRequest } from '../request/profile.request';
+import { DeleteTalkUseCase } from '../../../core/usecases/delete-talk.use-case';
 
 @Controller('/talks')
 export class TalkController {
@@ -48,6 +51,7 @@ export class TalkController {
     private readonly updateTalkUseCase: UpdateTalkCreationRequestUseCase,
     private readonly approveOrRejectTalkUseCase: ApproveOrRejectTalkUseCase,
     private readonly getAllTalksByStatusUseCase: GetAllTalksByStatusUseCase,
+    private readonly deleteTalkUseCase: DeleteTalkUseCase,
   ) {}
 
   @Public()
@@ -133,6 +137,9 @@ export class TalkController {
   @ApiUnauthorizedResponse({
     description: 'Unauthorized access',
   })
+  @ApiForbiddenResponse({
+    description: 'User not allowed to update talk',
+  })
   async updateTalk(
     @CurrentUser() user: ProfileRequest,
     @Param('talkId') talkId: string,
@@ -172,5 +179,32 @@ export class TalkController {
   ): Promise<void> {
     const command = ApproveOrRejectTalkMapper.toDomain(talkId, body);
     await this.approveOrRejectTalkUseCase.execute(command);
+  }
+
+  @Roles(UserType.PLANNER)
+  @Delete('/:talkId')
+  @ApiOperation({ summary: 'Delete a talk' })
+  @ApiNoContentResponse({
+    description: 'Talk successfully deleted',
+  })
+  @ApiNotFoundResponse({
+    description: 'Talk not found (e.g. invalid talk ID or talk does not exist)',
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Internal server error',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized access',
+  })
+  @ApiForbiddenResponse({
+    description: 'User not allowed to update talk',
+  })
+  @HttpCode(204)
+  async deleteTalk(
+    @Param('talkId') talkId: string,
+    @CurrentUser() user: ProfileRequest,
+  ): Promise<void> {
+    const command = { currentUser: user, talkId };
+    await this.deleteTalkUseCase.execute(command);
   }
 }

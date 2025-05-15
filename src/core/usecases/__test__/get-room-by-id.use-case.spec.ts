@@ -2,6 +2,7 @@ import { InMemoryRoomRepository } from '../../../adapters/in-memory/in-memory-ro
 import { RoomRepository } from '../../domain/repository/room.repository';
 import { CreateRoomCommand, CreateRoomUseCase } from '../create-room.use-case';
 import { GetRoomByIdUseCase } from '../get-room-by-id.use-case';
+import { RoomNotFoundError } from '../../domain/error/RoomNotFoundError';
 
 describe('GetRoomByIdUseCase', () => {
   let roomRepository: RoomRepository;
@@ -38,5 +39,15 @@ describe('GetRoomByIdUseCase', () => {
     expect(result.id).toEqual(room.id);
     expect(result.name).toEqual(room.name);
     expect(result.capacity).toEqual(room.capacity);
+  });
+
+  it('should throw an error if room not found', async () => {
+    // Given
+    const roomId = 'non-existing-room-id';
+
+    // When & Then
+    await expect(getRoomByIdUseCase.execute(roomId)).rejects.toThrow(
+      new RoomNotFoundError(roomId),
+    );
   });
 });

@@ -8,7 +8,6 @@ export class CreateRoomRequest {
   name: string;
 
   @ApiProperty()
-  @IsString()
   @Min(1)
   capacity: number;
 

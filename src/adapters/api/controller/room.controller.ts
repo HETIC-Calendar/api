@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { CreateRoomUseCase } from '../../../core/usecases/create-room.use-case';
 import { CreateRoomRequest } from '../request/create-room.request';
 import { CreateRoomMapper } from '../mapper/create-room.mapper';
 import { GetAllRoomsUseCase } from '../../../core/usecases/get-all-rooms.use-case';
+import { GetRoomByIdUseCase } from '../../../core/usecases/get-room-by-id.use-case';
 import { CreateRoomResponse } from '../response/create-room.response';
 import { GetAllRoomsResponse } from '../response/get-all-rooms.response';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
@@ -22,6 +23,7 @@ export class RoomController {
   constructor(
     private readonly createRoomUseCase: CreateRoomUseCase,
     private readonly getAllRoomsUseCase: GetAllRoomsUseCase,
+    private readonly getRoomByIdUseCase: GetRoomByIdUseCase,
   ) {}
 
   @Get()
@@ -41,6 +43,23 @@ export class RoomController {
     return new GetAllRoomsResponse(
       rooms.map((room) => CreateRoomMapper.fromDomain(room)),
     );
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get room by ID' })
+  @ApiOkResponse({
+    description: 'Room details',
+    type: CreateRoomResponse,
+  })
+  @ApiNotFoundResponse({
+    description: 'Room not found',
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Internal server error',
+  })
+  async getRoomById(@Param('id') id: string): Promise<CreateRoomResponse> {
+    const room = await this.getRoomByIdUseCase.execute(id);
+    return CreateRoomMapper.fromDomain(room);
   }
 
   @UseGuards(JwtAuthGuard)

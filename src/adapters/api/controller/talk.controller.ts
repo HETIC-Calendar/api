@@ -3,14 +3,13 @@ import {
   Controller,
   Post,
   Param,
-  UseGuards,
   Get,
   Query,
+  HttpCode,
 } from '@nestjs/common';
 import { CreateTalkCreationRequestUseCase } from '../../../core/usecases/create-talk-creation-request.use-case';
 import { ApproveOrRejectTalkUseCase } from '../../../core/usecases/approve-or-reject-talk-use.case';
 import { CreateTalkRequest } from '../request/create-talk.request';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -146,6 +145,9 @@ export class TalkController {
   @ApiNoContentResponse({
     description: 'Talk successfully accepted or rejected',
   })
+  @ApiNoContentResponse({
+    description: 'Talk successfully accepted or rejected',
+  })
   @ApiNotFoundResponse({
     description: 'Talk not found (e.g. invalid talk ID or talk does not exist)',
   })
@@ -159,6 +161,7 @@ export class TalkController {
   @ApiUnauthorizedResponse({
     description: 'Unauthorized access',
   })
+  @HttpCode(204)
   async approveOrRejectTalk(
     @Param('talkId') talkId: string,
     @Body() body: ApproveOrRejectTalkRequest,

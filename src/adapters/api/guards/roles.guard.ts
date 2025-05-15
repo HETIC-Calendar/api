@@ -9,7 +9,6 @@ import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { UserType } from '../../../core/domain/type/UserType';
 import { ROLES_KEY } from '../decorator/roles.decorator';
-import { log } from 'console';
 
 type AuthenticatedUser = {
   id: string;

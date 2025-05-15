@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CreateUserUseCase } from '../../../core/usecases/create-user.use-case';
 import { LoginUseCase } from '../../../core/usecases/login.use-case';
 import { CreateUserRequest } from '../request/create-user.request';
@@ -6,7 +6,6 @@ import { User } from '../../../core/domain/model/User';
 import { UserMapper } from '../mapper/user.mapper';
 import { LoginMapper } from '../mapper/login.mapper';
 import { LoginResponse } from '../response/create-user.response';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { CurrentUser } from '../decorator/current-user.decorator';
 import { ProfileMapper } from '../mapper/profile.mapper';
 import { ProfileRequest } from '../request/profile.request';

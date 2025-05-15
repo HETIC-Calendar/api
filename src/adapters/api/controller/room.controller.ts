@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateRoomUseCase } from '../../../core/usecases/create-room.use-case';
 import { CreateRoomRequest } from '../request/create-room.request';
 import { CreateRoomMapper } from '../mapper/create-room.mapper';
@@ -6,7 +6,6 @@ import { GetAllRoomsUseCase } from '../../../core/usecases/get-all-rooms.use-cas
 import { GetRoomByIdUseCase } from '../../../core/usecases/get-room-by-id.use-case';
 import { CreateRoomResponse } from '../response/create-room.response';
 import { GetAllRoomsResponse } from '../response/get-all-rooms.response';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,

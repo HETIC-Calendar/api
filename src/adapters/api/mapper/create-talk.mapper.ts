@@ -2,17 +2,18 @@ import { CreateTalkCommand } from '../../../core/usecases/create-talk-creation-r
 import { CreateTalkRequest } from '../request/create-talk.request';
 import { CreateTalkResponse } from '../response/create-talk.response';
 import { Talk } from '../../../core/domain/model/Talk';
+import { ProfileRequest } from '../request/profile.request';
 
 export class CreateTalkMapper {
   static toDomain(
-    speakerId: string,
+    currentUser: ProfileRequest,
     request: CreateTalkRequest,
   ): CreateTalkCommand {
     return {
+      currentUser,
       title: request.title,
       subject: request.subject,
       description: request.description,
-      speakerId: speakerId,
       roomId: request.roomId,
       level: request.level,
       startTime: new Date(request.startTime),

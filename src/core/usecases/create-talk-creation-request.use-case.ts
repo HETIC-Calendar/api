@@ -10,12 +10,13 @@ import { TalkStatus } from '../domain/type/TalkStatus';
 import { TalkLevel } from '../domain/type/TalkLevel';
 import { UserRepository } from '../domain/repository/user.repository';
 import { UserNotFoundError } from '../domain/error/UserNotFoundError';
+import { User } from '../domain/model/User';
 
 export type CreateTalkCommand = {
+  currentUser: Pick<User, 'id' | 'type'>;
   title: string;
   subject: TalkSubject;
   description: string;
-  speakerId: string;
   roomId: string;
   level: TalkLevel;
   startTime: Date;
@@ -51,9 +52,9 @@ export class CreateTalkCreationRequestUseCase
       );
     }
 
-    const speaker = await this.userRepository.findById(command.speakerId);
+    const speaker = await this.userRepository.findById(command.currentUser.id);
     if (!speaker) {
-      throw new UserNotFoundError(command.speakerId);
+      throw new UserNotFoundError(command.currentUser.id);
     }
 
     const room = await this.roomRepository.findById(command.roomId);
@@ -83,7 +84,7 @@ export class CreateTalkCreationRequestUseCase
       command.title,
       command.subject,
       command.description,
-      command.speakerId,
+      command.currentUser.id,
       command.roomId,
       command.level,
       command.startTime,

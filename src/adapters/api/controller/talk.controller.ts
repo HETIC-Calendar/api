@@ -104,7 +104,7 @@ export class TalkController {
     @CurrentUser() user: ProfileRequest,
     @Body() body: CreateTalkRequest,
   ): Promise<CreateTalkResponse> {
-    const command = CreateTalkMapper.toDomain(user.id, body);
+    const command = CreateTalkMapper.toDomain(user, body);
     const talk = await this.createTalkUseCase.execute(command);
     return CreateTalkMapper.fromDomain(talk);
   }

@@ -38,9 +38,6 @@ export class RoomController {
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
   })
-  @ApiUnauthorizedResponse({
-    description: 'Unauthorized access',
-  })
   async getAllRooms(): Promise<GetAllRoomsResponse> {
     const rooms = await this.getAllRoomsUseCase.execute();
     return new GetAllRoomsResponse(

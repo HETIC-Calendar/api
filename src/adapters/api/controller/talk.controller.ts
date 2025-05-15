@@ -34,11 +34,16 @@ import { GetAllTalksWithRoomDetailResponse } from '../response/get-all-talks-wit
 import { GetAllTalksWithRoomDetailMapper } from '../mapper/get-all-talks-with-room-detail.mapper';
 import { UserType } from '../../../core/domain/type/UserType';
 import { Roles } from '../decorator/roles.decorator';
+import { UpdateTalkRequest } from '../request/update-talk.request';
+import { UpdateTalkMapper } from '../mapper/update-talk.mapper';
+import { UpdateTalkCreationRequestUseCase } from '../../../core/usecases/update-talk-creation-request.use-case';
+import { UpdateTalkResponse } from '../response/update-talk.response';
 
 @Controller('/talks')
 export class TalkController {
   constructor(
     private readonly createTalkUseCase: CreateTalkCreationRequestUseCase,
+    private readonly updateTalkUseCase: UpdateTalkCreationRequestUseCase,
     private readonly approveOrRejectTalkUseCase: ApproveOrRejectTalkUseCase,
     private readonly getAllTalksByStatusUseCase: GetAllTalksByStatusUseCase,
   ) {}
@@ -99,6 +104,40 @@ export class TalkController {
     const command = CreateTalkMapper.toDomain(body);
     const talk = await this.createTalkUseCase.execute(command);
     return CreateTalkMapper.fromDomain(talk);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/:talkId')
+  @Roles(UserType.PLANNER, UserType.SPEAKER)
+  @ApiOperation({ summary: 'Update a talk' })
+  @ApiCreatedResponse({
+    description: 'Talk successfully updated',
+    type: UpdateTalkResponse,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid input or validation error',
+  })
+  @ApiNotFoundResponse({
+    description:
+      'Referenced resource not found (e.g. linked room if applicable)',
+  })
+  @ApiConflictResponse({
+    description:
+      'Talk creation failed due to conflict (e.g. duplicate talk or scheduling overlap)',
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Internal server error',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized access',
+  })
+  async updateTalk(
+    @Param('talkId') talkId: string,
+    @Body() body: UpdateTalkRequest,
+  ): Promise<UpdateTalkResponse> {
+    const command = UpdateTalkMapper.toDomain(talkId, body);
+    const talk = await this.updateTalkUseCase.execute(command);
+    return UpdateTalkMapper.fromDomain(talk);
   }
 
   @UseGuards(JwtAuthGuard)

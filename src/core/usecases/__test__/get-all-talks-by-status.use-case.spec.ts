@@ -13,8 +13,8 @@ describe('GetAllTalksByStatusUseCase', () => {
   let getAllTalksByStatusUseCase: GetAllTalksByStatusUseCase;
 
   beforeEach(async () => {
-    talkRepository = new InMemoryTalkRepository();
     roomRepository = new InMemoryRoomRepository();
+    talkRepository = new InMemoryTalkRepository(roomRepository);
     await talkRepository.removeAll();
     await roomRepository.removeAll();
     getAllTalksByStatusUseCase = new GetAllTalksByStatusUseCase(talkRepository);
@@ -118,6 +118,26 @@ describe('GetAllTalksByStatusUseCase', () => {
 
     // Then
     expect(talks.length).toEqual(0);
+  });
+
+  it('should return talks enriched with room', async () => {
+    // Given
+    await createTalk(TalkStatus.PENDING_APPROVAL);
+    const command = {
+      status: TalkStatus.PENDING_APPROVAL,
+    };
+
+    // When
+    const talks = await getAllTalksByStatusUseCase.execute(command);
+
+    // Then
+    expect(talks.length).toEqual(1);
+    expect(talks[0]?.room).toBeDefined();
+    expect(talks[0]?.room?.id).toEqual('room-1');
+    expect(talks[0]?.room?.name).toEqual('Room 1');
+    expect(talks[0]?.room?.capacity).toEqual(10);
+    expect(talks[0]?.room?.createdAt).toBeDefined();
+    expect(talks[0]?.room?.updatedAt).toBeDefined();
   });
 
   async function createTalk(status: TalkStatus): Promise<void> {

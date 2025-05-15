@@ -14,8 +14,8 @@ describe('ApproveOrRejectTalkUseCase', () => {
   let approveOrRejectTalkUseCase: ApproveOrRejectTalkUseCase;
 
   beforeEach(async () => {
-    talkRepository = new InMemoryTalkRepository();
     roomRepository = new InMemoryRoomRepository();
+    talkRepository = new InMemoryTalkRepository(roomRepository);
     await talkRepository.removeAll();
     await roomRepository.removeAll();
     approveOrRejectTalkUseCase = new ApproveOrRejectTalkUseCase(talkRepository);

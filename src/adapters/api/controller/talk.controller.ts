@@ -30,7 +30,8 @@ import { CreateTalkMapper } from '../mapper/create-talk.mapper';
 import { GetAllTalksByStatusRequest } from '../request/get-all-talks-by-status.request';
 import { GetAllTalksByStatusUseCase } from '../../../core/usecases/get-all-talks-by-status.use-case';
 import { TalkStatus } from '../../../core/domain/type/TalkStatus';
-import { GetAllTalksResponse } from '../response/get-all-talks.response';
+import { GetAllTalksWithRoomDetailResponse } from '../response/get-all-talks-with-room-detail.response';
+import { GetAllTalksWithRoomDetailMapper } from '../mapper/get-all-talks-with-room-detail.mapper';
 
 @Controller('/talks')
 export class TalkController {
@@ -50,7 +51,7 @@ export class TalkController {
   @ApiOperation({ summary: 'Get all talks by status' })
   @ApiOkResponse({
     description: 'List of all talks',
-    type: GetAllTalksResponse,
+    type: GetAllTalksWithRoomDetailResponse,
   })
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
@@ -58,12 +59,11 @@ export class TalkController {
   async getAllTalks(
     @Query('status')
     status: TalkStatus,
-  ): Promise<GetAllTalksResponse> {
+  ): Promise<GetAllTalksWithRoomDetailResponse> {
     const request: GetAllTalksByStatusRequest = { status };
-    const talks = await this.getAllTalksByStatusUseCase.execute(request);
-    return new GetAllTalksResponse(
-      talks.map((talk) => CreateTalkMapper.fromDomain(talk)),
-    );
+    const talksWithRoomDetail =
+      await this.getAllTalksByStatusUseCase.execute(request);
+    return GetAllTalksWithRoomDetailMapper.fromDomain(talksWithRoomDetail);
   }
 
   @UseGuards(JwtAuthGuard)

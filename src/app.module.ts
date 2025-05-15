@@ -20,7 +20,6 @@ import { TokenService } from './core/domain/service/token.service';
 import { UserController } from './adapters/api/controller/auth.controller';
 import { UserRepository } from './core/domain/repository/user.repository';
 import { ApproveOrRejectTalkUseCase } from './core/usecases/approve-or-reject-talk-use.case';
-import { JwtAuthGuard } from './adapters/api/guards/jwt-auth.guard';
 import { GetAllTalksByStatusUseCase } from './core/usecases/get-all-talks-by-status.use-case';
 import { GetRoomByIdUseCase } from './core/usecases/get-room-by-id.use-case';
 import { UpdateTalkCreationRequestUseCase } from './core/usecases/update-talk-creation-request.use-case';
@@ -36,7 +35,6 @@ import { UpdateTalkCreationRequestUseCase } from './core/usecases/update-talk-cr
   providers: [
     PrismaService,
     JwtService,
-    JwtAuthGuard,
     {
       provide: 'TokenService',
       useFactory: (jwtService: JwtService) => new JwtServiceAdapter(jwtService),

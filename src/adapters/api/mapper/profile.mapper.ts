@@ -5,6 +5,7 @@ export class ProfileMapper {
     return {
       id: user.id,
       email: user.email,
+      type: user.type,
     };
   }
 }

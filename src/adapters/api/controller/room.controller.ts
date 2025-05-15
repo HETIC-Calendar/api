@@ -19,6 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { Roles } from '../decorator/roles.decorator';
 import { UserType } from '../../../core/domain/type/UserType';
+import { Public } from '../decorator/public.decorator';
 
 @Controller('/rooms')
 export class RoomController {
@@ -28,6 +29,7 @@ export class RoomController {
     private readonly getRoomByIdUseCase: GetRoomByIdUseCase,
   ) {}
 
+  @Public()
   @Get()
   @ApiOperation({ summary: 'Get all rooms' })
   @ApiOkResponse({
@@ -47,6 +49,7 @@ export class RoomController {
     );
   }
 
+  @Public()
   @Get(':id')
   @ApiOperation({ summary: 'Get room by ID' })
   @ApiOkResponse({
@@ -64,7 +67,6 @@ export class RoomController {
     return CreateRoomMapper.fromDomain(room);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Roles(UserType.PLANNER)
   @Post()
   @ApiOperation({ summary: 'Create a new room' })

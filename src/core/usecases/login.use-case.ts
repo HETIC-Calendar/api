@@ -31,6 +31,7 @@ export class LoginUseCase implements UseCase<LoginCommand, string> {
     const token = this.tokenService.generateToken({
       id: user.id,
       email: user.email,
+      type: user.type,
     });
 
     return token;

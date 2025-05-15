@@ -34,6 +34,7 @@ import { GetAllTalksWithRoomDetailResponse } from '../response/get-all-talks-wit
 import { GetAllTalksWithRoomDetailMapper } from '../mapper/get-all-talks-with-room-detail.mapper';
 import { UserType } from '../../../core/domain/type/UserType';
 import { Roles } from '../decorator/roles.decorator';
+import { Public } from '../decorator/public.decorator';
 import { UpdateTalkRequest } from '../request/update-talk.request';
 import { UpdateTalkMapper } from '../mapper/update-talk.mapper';
 import { UpdateTalkCreationRequestUseCase } from '../../../core/usecases/update-talk-creation-request.use-case';
@@ -48,6 +49,7 @@ export class TalkController {
     private readonly getAllTalksByStatusUseCase: GetAllTalksByStatusUseCase,
   ) {}
 
+  @Public()
   @Get()
   @ApiQuery({
     name: 'status',
@@ -73,9 +75,8 @@ export class TalkController {
     return GetAllTalksWithRoomDetailMapper.fromDomain(talksWithRoomDetail);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Post()
   @Roles(UserType.PLANNER, UserType.SPEAKER)
+  @Post()
   @ApiOperation({ summary: 'Create a new talk' })
   @ApiCreatedResponse({
     description: 'Talk successfully created',
@@ -106,7 +107,6 @@ export class TalkController {
     return CreateTalkMapper.fromDomain(talk);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('/:talkId')
   @Roles(UserType.PLANNER, UserType.SPEAKER)
   @ApiOperation({ summary: 'Update a talk' })
@@ -140,7 +140,6 @@ export class TalkController {
     return UpdateTalkMapper.fromDomain(talk);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Roles(UserType.PLANNER)
   @Post('/:talkId/approve-or-reject')
   @ApiOperation({ summary: 'Accept or reject a talk' })

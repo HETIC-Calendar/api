@@ -4,6 +4,9 @@ import { DomainErrorFilter } from './config/domain-error.filter';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference';
 import { ValidationPipe } from '@nestjs/common';
+import { RolesGuard } from './adapters/api/guards/roles.guard'; // 👈 Importe ton guard
+import { Reflector } from '@nestjs/core';
+import { JwtAuthGuard } from './adapters/api/guards/jwt-auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,6 +15,12 @@ async function bootstrap() {
   app.enableCors({
     origin: process.env.CORS_ORIGIN || 'http://localhost:8080',
   });
+
+  const reflector = app.get(Reflector);
+  app.useGlobalGuards(
+    new JwtAuthGuard(app.get('TokenService'), reflector),
+    new RolesGuard(reflector),
+  );
 
   const config = new DocumentBuilder()
     .setTitle('API Documentation')

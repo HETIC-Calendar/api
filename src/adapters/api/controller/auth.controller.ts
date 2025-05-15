@@ -19,6 +19,7 @@ import {
   ApiOkResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { Public } from '../decorator/public.decorator';
 
 @Controller('/auth')
 export class UserController {
@@ -27,6 +28,7 @@ export class UserController {
     private readonly loginUseCase: LoginUseCase,
   ) {}
 
+  @Public()
   @Post('/register')
   @ApiCreatedResponse({
     description: 'User successfully registered',
@@ -46,6 +48,7 @@ export class UserController {
     return this.createUserUseCase.execute(command);
   }
 
+  @Public()
   @Post('/login')
   @ApiCreatedResponse({
     description: 'User successfully logged in',
@@ -63,7 +66,6 @@ export class UserController {
     return LoginMapper.fromDomain(token);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('/me')
   @ApiOkResponse({
     description: 'User profile retrieved successfully',

@@ -10,20 +10,28 @@ import { RoomNotFoundError } from '../../domain/error/RoomNotFoundError';
 import { TalkSubject } from '../../domain/type/TalkSubject';
 import { TalkStatus } from '../../domain/type/TalkStatus';
 import { TalkLevel } from '../../domain/type/TalkLevel';
+import { InMemoryUserRepository } from '../../../adapters/in-memory/in-memory-user.repository';
+import { UserRepository } from '../../domain/repository/user.repository';
+import { UserType } from '../../domain/type/UserType';
+import { UserNotFoundError } from '../../domain/error/UserNotFoundError';
 
 describe('CreateTalkCreationRequestUseCase', () => {
   let talkRepository: TalkRepository;
   let roomRepository: RoomRepository;
+  let userRepository: UserRepository;
   let createTalkUseCase: CreateTalkCreationRequestUseCase;
 
   beforeEach(async () => {
     roomRepository = new InMemoryRoomRepository();
     talkRepository = new InMemoryTalkRepository(roomRepository);
+    userRepository = new InMemoryUserRepository();
     await talkRepository.removeAll();
     await roomRepository.removeAll();
+    await userRepository.removeAll();
     createTalkUseCase = new CreateTalkCreationRequestUseCase(
       talkRepository,
       roomRepository,
+      userRepository,
     );
   });
 
@@ -33,20 +41,25 @@ describe('CreateTalkCreationRequestUseCase', () => {
 
   it('should return created talk', async () => {
     // Given
-    const roomEntity = {
+    await userRepository.create({
+      id: 'speaker-1',
+      email: 'john.doe@example.com',
+      password: 'password123',
+      type: UserType.SPEAKER,
+    });
+    await roomRepository.create({
       id: 'room-1',
       name: 'Room 1',
       capacity: 10,
       createdAt: new Date(),
       updatedAt: new Date(),
-    };
-    await roomRepository.create(roomEntity);
+    });
     const command: CreateTalkCommand = {
       title: 'La Clean Architecture pour les nuls',
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
+      speakerId: 'speaker-1',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:00:00Z'),
@@ -67,7 +80,7 @@ describe('CreateTalkCreationRequestUseCase', () => {
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
+      speakerId: 'speaker-1',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:00:00Z'),
@@ -79,14 +92,46 @@ describe('CreateTalkCreationRequestUseCase', () => {
     });
   });
 
-  it('should throw error when room not found', async () => {
+  it('should throw error when speaker not found', async () => {
     // Given
     const command: CreateTalkCommand = {
       title: 'La Clean Architecture pour les nuls',
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
+      speakerId: 'speaker-1',
+      roomId: 'room-1',
+      level: TalkLevel.BEGINNER,
+      startTime: new Date('2023-10-01T10:00:00Z'),
+      endTime: new Date('2023-10-01T11:00:00Z'),
+    };
+
+    // When
+    try {
+      await createTalkUseCase.execute(command);
+    } catch (error) {
+      // Then
+      expect(error).toBeInstanceOf(UserNotFoundError);
+      expect((error as Error).message).toEqual(
+        'User with email speaker-1 not found',
+      );
+    }
+  });
+
+  it('should throw error when room not found', async () => {
+    // Given
+    await userRepository.create({
+      id: 'speaker-1',
+      email: 'john.doe@example.com',
+      password: 'password123',
+      type: UserType.SPEAKER,
+    });
+    const command: CreateTalkCommand = {
+      title: 'La Clean Architecture pour les nuls',
+      subject: TalkSubject.WEB_DEVELOPMENT,
+      description:
+        'Une introduction à la Clean Architecture dans le monde TypeScript.',
+      speakerId: 'speaker-1',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:00:00Z'),
@@ -112,7 +157,7 @@ describe('CreateTalkCreationRequestUseCase', () => {
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
+      speakerId: 'speaker-1',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T11:00:00Z'),
@@ -135,7 +180,7 @@ describe('CreateTalkCreationRequestUseCase', () => {
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
+      speakerId: 'speaker-1',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T08:00:00Z'),
@@ -164,7 +209,7 @@ describe('CreateTalkCreationRequestUseCase', () => {
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
+      speakerId: 'speaker-1',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:30:00Z'),
@@ -193,7 +238,7 @@ describe('CreateTalkCreationRequestUseCase', () => {
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
+      speakerId: 'speaker-1',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:30:00Z'),
@@ -212,6 +257,13 @@ describe('CreateTalkCreationRequestUseCase', () => {
     startTime: Date,
     endTime: Date,
   ): Promise<void> {
+    await userRepository.create({
+      id: 'speaker-1',
+      email: 'john.doe@example.com',
+      password: 'password123',
+      type: UserType.SPEAKER,
+    });
+
     await roomRepository.create({
       id: 'room-1',
       name: 'Room 1',
@@ -227,7 +279,7 @@ describe('CreateTalkCreationRequestUseCase', () => {
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
+      speakerId: 'speaker-1',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime,

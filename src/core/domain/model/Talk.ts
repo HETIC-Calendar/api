@@ -8,7 +8,7 @@ export class Talk extends DomainModel {
   title: string;
   subject: TalkSubject;
   description: string;
-  speaker: string;
+  speakerId: string;
   roomId: string;
   level: TalkLevel;
   startTime: Date;
@@ -22,7 +22,7 @@ export class Talk extends DomainModel {
     title: string,
     subject: TalkSubject,
     description: string,
-    speaker: string,
+    speakerId: string,
     roomId: string,
     level: TalkLevel,
     startTime: Date,
@@ -35,7 +35,7 @@ export class Talk extends DomainModel {
     this.title = title;
     this.subject = subject;
     this.description = description;
-    this.speaker = speaker;
+    this.speakerId = speakerId;
     this.roomId = roomId;
     this.level = level;
     this.startTime = startTime;

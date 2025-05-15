@@ -3,9 +3,11 @@ import { Talk } from './Talk';
 import { TalkStatus } from '../type/TalkStatus';
 import { TalkSubject } from '../type/TalkSubject';
 import { TalkLevel } from '../type/TalkLevel';
+import { User } from './User';
 
-export class TalkWithRoomDetail extends Talk {
+export class TalkWithDetail extends Talk {
   room: Room;
+  speaker: Omit<User, 'password'>;
 
   constructor(
     id: string,
@@ -13,12 +15,13 @@ export class TalkWithRoomDetail extends Talk {
     title: string,
     subject: TalkSubject,
     description: string,
-    speaker: string,
+    speakerId: string,
     roomId: string,
     level: TalkLevel,
     startTime: Date,
     endTime: Date,
     room: Room,
+    speaker: User,
     updatedAt?: Date,
     createdAt?: Date,
   ) {
@@ -28,7 +31,7 @@ export class TalkWithRoomDetail extends Talk {
       title,
       subject,
       description,
-      speaker,
+      speakerId,
       roomId,
       level,
       startTime,
@@ -37,5 +40,6 @@ export class TalkWithRoomDetail extends Talk {
       createdAt,
     );
     this.room = room;
+    this.speaker = speaker;
   }
 }

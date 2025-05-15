@@ -20,7 +20,7 @@ export class UpdateTalkResponse {
   description: string;
 
   @ApiProperty()
-  speaker: string;
+  speakerId: string;
 
   @ApiProperty()
   roomId: string;
@@ -46,7 +46,7 @@ export class UpdateTalkResponse {
     title: string,
     subject: TalkSubject,
     description: string,
-    speaker: string,
+    speakerId: string,
     roomId: string,
     level: TalkLevel,
     startTime: string,
@@ -59,7 +59,7 @@ export class UpdateTalkResponse {
     this.title = title;
     this.subject = subject;
     this.description = description;
-    this.speaker = speaker;
+    this.speakerId = speakerId;
     this.roomId = roomId;
     this.level = level;
     this.startTime = startTime;

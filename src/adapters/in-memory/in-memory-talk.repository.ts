@@ -3,14 +3,19 @@ import { TalkRepository } from '../../core/domain/repository/talk.repository';
 import { Talk } from '../../core/domain/model/Talk';
 import { TalkStatus } from '../../core/domain/type/TalkStatus';
 import { RoomRepository } from '../../core/domain/repository/room.repository';
-import { TalkWithRoomDetail } from '../../core/domain/model/TalkWithRoomDetail';
+import { TalkWithDetail } from '../../core/domain/model/TalkWithDetail';
 import { Room } from '../../core/domain/model/Room';
+import { User } from '../../core/domain/model/User';
+import { UserRepository } from '../../core/domain/repository/user.repository';
 
 @Injectable()
 export class InMemoryTalkRepository implements TalkRepository {
   private talks: Map<string, Talk> = new Map();
 
-  constructor(private readonly roomRepository: RoomRepository) {}
+  constructor(
+    private readonly roomRepository: RoomRepository,
+    private readonly userRepository: UserRepository,
+  ) {}
 
   create(talk: Talk): any {
     this.talks.set(talk.id, talk);
@@ -34,41 +39,46 @@ export class InMemoryTalkRepository implements TalkRepository {
     );
   }
 
-  async findByStatusWithRoomDetails(
+  async findByStatusWithDetails(
     status?: TalkStatus,
-  ): Promise<TalkWithRoomDetail[]> {
+  ): Promise<TalkWithDetail[]> {
     const rooms = await this.roomRepository.findAll();
+    const speakers = await this.userRepository.findAll();
     const talks = status
       ? Array.from(this.talks.values()).filter((talk) => talk.status === status)
       : Array.from(this.talks.values());
 
-    return this.enrichTalksWithRoomDetails(talks, rooms);
+    return this.enrichTalksWithDetails(talks, rooms, speakers);
   }
 
-  async findAllWithRoomDetail(): Promise<TalkWithRoomDetail[]> {
+  async findAllWithRoomDetail(): Promise<TalkWithDetail[]> {
     const rooms = await this.roomRepository.findAll();
+    const speakers = await this.userRepository.findAll();
     const talks = Array.from(this.talks.values());
-    return this.enrichTalksWithRoomDetails(talks, rooms);
+    return this.enrichTalksWithDetails(talks, rooms, speakers);
   }
 
-  private enrichTalksWithRoomDetails(
+  private enrichTalksWithDetails(
     talks: Talk[],
     rooms: Room[],
-  ): TalkWithRoomDetail[] {
+    speakers: User[],
+  ): TalkWithDetail[] {
     return talks.map((talk) => {
       const room = rooms.find((room) => room.id === talk.roomId);
-      return new TalkWithRoomDetail(
+      const speaker = speakers.find((speaker) => speaker.id === talk.speakerId);
+      return new TalkWithDetail(
         talk.id,
         talk.status,
         talk.title,
         talk.subject,
         talk.description,
-        talk.speaker,
+        talk.speakerId,
         talk.roomId,
         talk.level,
         talk.startTime,
         talk.endTime,
         room || ({} as Room),
+        speaker || ({} as User),
         talk.updatedAt,
         talk.createdAt,
       );

@@ -78,7 +78,13 @@ import { UpdateTalkCreationRequestUseCase } from './core/usecases/update-talk-cr
       useFactory: (
         talkRepository: TalkRepository,
         roomRepository: RoomRepository,
-      ) => new CreateTalkCreationRequestUseCase(talkRepository, roomRepository),
+        userRepository: UserRepository,
+      ) =>
+        new CreateTalkCreationRequestUseCase(
+          talkRepository,
+          roomRepository,
+          userRepository,
+        ),
       inject: [TalkRepository, RoomRepository],
     },
     {

@@ -28,12 +28,6 @@ export class CreateTalkRequest {
   description: string;
 
   @ApiProperty()
-  @IsString()
-  @MinLength(2)
-  @MaxLength(64)
-  speaker: string;
-
-  @ApiProperty()
   @IsUUID()
   roomId: string;
 
@@ -53,7 +47,6 @@ export class CreateTalkRequest {
     title: string,
     subject: TalkSubject,
     description: string,
-    speaker: string,
     roomId: string,
     level: TalkLevel,
     startTime: string,
@@ -62,7 +55,6 @@ export class CreateTalkRequest {
     this.title = title;
     this.subject = subject;
     this.description = description;
-    this.speaker = speaker;
     this.roomId = roomId;
     this.level = level;
     this.startTime = startTime;

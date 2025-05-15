@@ -29,8 +29,8 @@ import { CreateTalkMapper } from '../mapper/create-talk.mapper';
 import { GetAllTalksByStatusRequest } from '../request/get-all-talks-by-status.request';
 import { GetAllTalksByStatusUseCase } from '../../../core/usecases/get-all-talks-by-status.use-case';
 import { TalkStatus } from '../../../core/domain/type/TalkStatus';
-import { GetAllTalksWithRoomDetailResponse } from '../response/get-all-talks-with-room-detail.response';
-import { GetAllTalksWithRoomDetailMapper } from '../mapper/get-all-talks-with-room-detail.mapper';
+import { GetAllTalksWithDetailResponse } from '../response/get-all-talks-with-detail.response';
+import { GetAllTalksWithDetailMapper } from '../mapper/get-all-talks-with-detail.mapper';
 import { UserType } from '../../../core/domain/type/UserType';
 import { Roles } from '../decorator/roles.decorator';
 import { Public } from '../decorator/public.decorator';
@@ -38,6 +38,8 @@ import { UpdateTalkRequest } from '../request/update-talk.request';
 import { UpdateTalkMapper } from '../mapper/update-talk.mapper';
 import { UpdateTalkCreationRequestUseCase } from '../../../core/usecases/update-talk-creation-request.use-case';
 import { UpdateTalkResponse } from '../response/update-talk.response';
+import { CurrentUser } from '../decorator/current-user.decorator';
+import { ProfileRequest } from '../request/profile.request';
 
 @Controller('/talks')
 export class TalkController {
@@ -59,7 +61,7 @@ export class TalkController {
   @ApiOperation({ summary: 'Get all talks by status' })
   @ApiOkResponse({
     description: 'List of all talks',
-    type: GetAllTalksWithRoomDetailResponse,
+    type: GetAllTalksWithDetailResponse,
   })
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
@@ -67,11 +69,11 @@ export class TalkController {
   async getAllTalks(
     @Query('status')
     status: TalkStatus,
-  ): Promise<GetAllTalksWithRoomDetailResponse> {
+  ): Promise<GetAllTalksWithDetailResponse> {
     const request: GetAllTalksByStatusRequest = { status };
-    const talksWithRoomDetail =
+    const talksWithDetail =
       await this.getAllTalksByStatusUseCase.execute(request);
-    return GetAllTalksWithRoomDetailMapper.fromDomain(talksWithRoomDetail);
+    return GetAllTalksWithDetailMapper.fromDomain(talksWithDetail);
   }
 
   @Roles(UserType.PLANNER, UserType.SPEAKER)
@@ -99,9 +101,10 @@ export class TalkController {
     description: 'Unauthorized access',
   })
   async createTalk(
+    @CurrentUser() user: ProfileRequest,
     @Body() body: CreateTalkRequest,
   ): Promise<CreateTalkResponse> {
-    const command = CreateTalkMapper.toDomain(body);
+    const command = CreateTalkMapper.toDomain(user.id, body);
     const talk = await this.createTalkUseCase.execute(command);
     return CreateTalkMapper.fromDomain(talk);
   }
@@ -131,10 +134,11 @@ export class TalkController {
     description: 'Unauthorized access',
   })
   async updateTalk(
+    @CurrentUser() user: ProfileRequest,
     @Param('talkId') talkId: string,
     @Body() body: UpdateTalkRequest,
   ): Promise<UpdateTalkResponse> {
-    const command = UpdateTalkMapper.toDomain(talkId, body);
+    const command = UpdateTalkMapper.toDomain(user, talkId, body);
     const talk = await this.updateTalkUseCase.execute(command);
     return UpdateTalkMapper.fromDomain(talk);
   }

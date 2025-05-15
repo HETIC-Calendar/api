@@ -11,15 +11,20 @@ import {
   UpdateTalkCreationRequestUseCase,
 } from '../update-talk-creation-request.use-case';
 import { TalkNotFoundError } from '../../domain/error/TalkNotFoundError';
+import { UserType } from '../../domain/type/UserType';
+import { UserRepository } from '../../domain/repository/user.repository';
+import { InMemoryUserRepository } from '../../../adapters/in-memory/in-memory-user.repository';
 
 describe('UpdateTalkCreationRequestUseCase', () => {
   let talkRepository: TalkRepository;
   let roomRepository: RoomRepository;
+  let userRepository: UserRepository;
   let updateTalkUseCase: UpdateTalkCreationRequestUseCase;
 
   beforeEach(async () => {
     roomRepository = new InMemoryRoomRepository();
-    talkRepository = new InMemoryTalkRepository(roomRepository);
+    userRepository = new InMemoryUserRepository();
+    talkRepository = new InMemoryTalkRepository(roomRepository, userRepository);
     await talkRepository.removeAll();
     await roomRepository.removeAll();
     updateTalkUseCase = new UpdateTalkCreationRequestUseCase(
@@ -42,12 +47,15 @@ describe('UpdateTalkCreationRequestUseCase', () => {
       new Date('2023-10-01T11:00:00Z'),
     );
     const command: UpdateTalkCommand = {
+      currentUser: {
+        id: 'speaker-1',
+        type: UserType.SPEAKER,
+      },
       talkId,
       title: 'La Clean Architecture pour les nuls',
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:00:00Z'),
@@ -68,7 +76,7 @@ describe('UpdateTalkCreationRequestUseCase', () => {
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
+      speakerId: 'speaker-1',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:00:00Z'),
@@ -83,12 +91,15 @@ describe('UpdateTalkCreationRequestUseCase', () => {
   it('should throw error when talk not found', async () => {
     // Given
     const command: UpdateTalkCommand = {
+      currentUser: {
+        id: 'speaker-1',
+        type: UserType.SPEAKER,
+      },
       talkId: 'talk-1',
       title: 'La Clean Architecture pour les nuls',
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:00:00Z'),
@@ -117,12 +128,15 @@ describe('UpdateTalkCreationRequestUseCase', () => {
       new Date('2023-10-01T11:00:00Z'),
     );
     const command: UpdateTalkCommand = {
+      currentUser: {
+        id: 'speaker-1',
+        type: UserType.SPEAKER,
+      },
       talkId,
       title: 'La Clean Architecture pour les nuls',
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
       roomId: 'room-2',
       level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:00:00Z'),
@@ -151,12 +165,15 @@ describe('UpdateTalkCreationRequestUseCase', () => {
       new Date('2023-10-01T11:00:00Z'),
     );
     const command: UpdateTalkCommand = {
+      currentUser: {
+        id: 'speaker-1',
+        type: UserType.SPEAKER,
+      },
       talkId,
       title: 'La Clean Architecture pour les nuls',
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T11:00:00Z'),
@@ -182,12 +199,15 @@ describe('UpdateTalkCreationRequestUseCase', () => {
       new Date('2023-10-01T11:00:00Z'),
     );
     const command: UpdateTalkCommand = {
+      currentUser: {
+        id: 'speaker-1',
+        type: UserType.SPEAKER,
+      },
       talkId,
       title: 'La Clean Architecture pour les nuls',
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T08:00:00Z'),
@@ -219,12 +239,15 @@ describe('UpdateTalkCreationRequestUseCase', () => {
       new Date('2023-10-01T11:00:00Z'),
     );
     const command: UpdateTalkCommand = {
+      currentUser: {
+        id: 'speaker-1',
+        type: UserType.SPEAKER,
+      },
       talkId,
       title: 'La Clean Architecture pour les nuls',
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:30:00Z'),
@@ -256,12 +279,15 @@ describe('UpdateTalkCreationRequestUseCase', () => {
       new Date('2023-10-01T11:00:00Z'),
     );
     const command: UpdateTalkCommand = {
+      currentUser: {
+        id: 'speaker-1',
+        type: UserType.SPEAKER,
+      },
       talkId,
       title: 'La Clean Architecture pour les nuls',
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:30:00Z'),
@@ -296,7 +322,7 @@ describe('UpdateTalkCreationRequestUseCase', () => {
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
+      speakerId: 'speaker-1',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime,

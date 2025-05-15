@@ -1,23 +1,32 @@
 import { EntityMapper } from '../../../core/base/entity-mapper';
-import { Talk as TalkEntity, Room as RoomEntity, $Enums } from '@prisma/client';
+import {
+  Talk as TalkEntity,
+  Room as RoomEntity,
+  User as UserEntity,
+  $Enums,
+} from '@prisma/client';
 import { TalkSubject } from '../../../core/domain/type/TalkSubject';
 import { TalkStatus } from '../../../core/domain/type/TalkStatus';
 import { TalkLevel } from '../../../core/domain/type/TalkLevel';
-import { TalkWithRoomDetail } from '../../../core/domain/model/TalkWithRoomDetail';
+import { TalkWithDetail } from '../../../core/domain/model/TalkWithDetail';
+import { UserType } from '../../../core/domain/type/UserType';
 
-type TalkEntityWithRoom = TalkEntity & { room: RoomEntity };
+type TalkEntityWithDetail = TalkEntity & {
+  room: RoomEntity;
+  speaker: Omit<UserEntity, 'password'>;
+};
 
-export class PrismaTalkWithRoomMapper
-  implements EntityMapper<TalkWithRoomDetail, TalkEntityWithRoom>
+export class PrismaTalkWithDetailMapper
+  implements EntityMapper<TalkWithDetail, TalkEntityWithDetail>
 {
-  fromDomain(model: TalkWithRoomDetail): TalkEntityWithRoom {
+  fromDomain(model: TalkWithDetail): TalkEntityWithDetail {
     return {
       id: model.id,
       status: model.status,
       title: model.title,
       subject: model.subject,
       description: model.description,
-      speaker: model.speaker,
+      speakerId: model.speakerId,
       roomId: model.roomId,
       level: model.level,
       startTime: model.startTime,
@@ -31,17 +40,24 @@ export class PrismaTalkWithRoomMapper
         updatedAt: model.room.updatedAt,
         createdAt: model.room.createdAt,
       },
+      speaker: {
+        id: model.speaker.id,
+        email: model.speaker.email,
+        type: model.speaker.type,
+        updatedAt: model.speaker.updatedAt,
+        createdAt: model.speaker.createdAt,
+      },
     };
   }
 
-  toDomain(entity: TalkEntityWithRoom): TalkWithRoomDetail {
+  toDomain(entity: TalkEntityWithDetail): TalkWithDetail {
     return {
       id: entity.id,
       status: this.mapTalkStatusToDomain(entity.status),
       title: entity.title,
       subject: this.mapTalkSubjectToDomain(entity.subject),
       description: entity.description,
-      speaker: entity.speaker,
+      speakerId: entity.speakerId,
       roomId: entity.roomId,
       level: this.mapTalkLevelToDomain(entity.level),
       startTime: entity.startTime,
@@ -52,6 +68,13 @@ export class PrismaTalkWithRoomMapper
         capacity: entity.room.capacity,
         updatedAt: entity.room.updatedAt,
         createdAt: entity.room.createdAt,
+      },
+      speaker: {
+        id: entity.speaker.id,
+        email: entity.speaker.email,
+        type: this.mapUserTypeToDomain(entity.speaker.type),
+        updatedAt: entity.speaker.updatedAt,
+        createdAt: entity.speaker.createdAt,
       },
       updatedAt: entity.updatedAt,
       createdAt: entity.createdAt,
@@ -108,6 +131,17 @@ export class PrismaTalkWithRoomMapper
         return TalkLevel.ADVANCED;
       default:
         throw new Error('Invalid talk level');
+    }
+  }
+
+  private mapUserTypeToDomain(type: $Enums.UserType): UserType {
+    switch (type) {
+      case 'PLANNER':
+        return UserType.PLANNER;
+      case 'SPEAKER':
+        return UserType.SPEAKER;
+      default:
+        throw new Error('Invalid user type');
     }
   }
 }

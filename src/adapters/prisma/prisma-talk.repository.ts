@@ -4,14 +4,14 @@ import { Talk } from '../../core/domain/model/Talk';
 import { PrismaService } from './prisma.service';
 import { PrismaTalkMapper } from './mapper/prisma-talk.mapper';
 import { TalkStatus } from '../../core/domain/type/TalkStatus';
-import { TalkWithRoomDetail } from '../../core/domain/model/TalkWithRoomDetail';
-import { PrismaTalkWithRoomMapper } from './mapper/prisma-talk-with-room.mapper';
+import { TalkWithDetail } from '../../core/domain/model/TalkWithDetail';
+import { PrismaTalkWithDetailMapper } from './mapper/prisma-talk-with-detail.mapper';
 
 @Injectable()
 export class PrismaTalkRepository implements TalkRepository {
   private mapper: PrismaTalkMapper = new PrismaTalkMapper();
-  private mapperWithRoom: PrismaTalkWithRoomMapper =
-    new PrismaTalkWithRoomMapper();
+  private mapperWithDetail: PrismaTalkWithDetailMapper =
+    new PrismaTalkWithDetailMapper();
 
   constructor(private readonly prisma: PrismaService) {}
 
@@ -47,23 +47,23 @@ export class PrismaTalkRepository implements TalkRepository {
     return entities.map((entity) => this.mapper.toDomain(entity));
   }
 
-  async findByStatusWithRoomDetails(
+  async findByStatusWithDetails(
     status?: TalkStatus,
-  ): Promise<TalkWithRoomDetail[]> {
+  ): Promise<TalkWithDetail[]> {
     const talks = await this.prisma.talk.findMany({
       where: status ? { status } : undefined,
-      include: { room: true },
+      include: { room: true, speaker: true },
     });
 
-    return talks.map((entity) => this.mapperWithRoom.toDomain(entity));
+    return talks.map((entity) => this.mapperWithDetail.toDomain(entity));
   }
 
-  async findAllWithRoomDetail(): Promise<TalkWithRoomDetail[]> {
+  async findAllWithRoomDetail(): Promise<TalkWithDetail[]> {
     const talks = await this.prisma.talk.findMany({
-      include: { room: true },
+      include: { room: true, speaker: true },
     });
 
-    return talks.map((entity) => this.mapperWithRoom.toDomain(entity));
+    return talks.map((entity) => this.mapperWithDetail.toDomain(entity));
   }
 
   async update(id: string, talk: Talk): Promise<Talk | null> {

@@ -8,8 +8,11 @@ import { RoomNotFoundError } from '../domain/error/RoomNotFoundError';
 import { TalkSubject } from '../domain/type/TalkSubject';
 import { TalkStatus } from '../domain/type/TalkStatus';
 import { TalkLevel } from '../domain/type/TalkLevel';
+import { TalkAlreadyApprovedOrRejectedError } from '../domain/error/TalkAlreadyApprovedOrRejectedError';
+import { TalkNotFoundError } from '../domain/error/TalkNotFoundError';
 
-export type CreateTalkCommand = {
+export type UpdateTalkCommand = {
+  talkId: string;
   title: string;
   subject: TalkSubject;
   description: string;
@@ -20,8 +23,8 @@ export type CreateTalkCommand = {
   endTime: Date;
 };
 
-export class CreateTalkCreationRequestUseCase
-  implements UseCase<CreateTalkCommand, Talk>
+export class UpdateTalkCreationRequestUseCase
+  implements UseCase<UpdateTalkCommand, Talk>
 {
   // TODO: Move to config
   private readonly MINIMAL_HOUR = 9;
@@ -32,7 +35,18 @@ export class CreateTalkCreationRequestUseCase
     private readonly roomRepository: RoomRepository,
   ) {}
 
-  async execute(command: CreateTalkCommand): Promise<Talk> {
+  async execute(command: UpdateTalkCommand): Promise<Talk> {
+    const existingTalk = await this.talkRepository.findById(command.talkId);
+    if (!existingTalk) {
+      throw new TalkNotFoundError(command.talkId);
+    }
+    if (existingTalk.status !== TalkStatus.PENDING_APPROVAL) {
+      throw new TalkAlreadyApprovedOrRejectedError(
+        existingTalk.id,
+        existingTalk.status,
+      );
+    }
+
     if (command.startTime >= command.endTime) {
       throw new InvalidTalkTimeError(
         'Talk start time must be before end time.',
@@ -58,7 +72,9 @@ export class CreateTalkCreationRequestUseCase
       [TalkStatus.PENDING_APPROVAL, TalkStatus.APPROVED],
     );
 
-    for (const talk of existingTalks) {
+    for (const talk of existingTalks.filter(
+      (talk) => talk.id !== command.talkId,
+    )) {
       if (
         command.startTime < talk.endTime &&
         command.endTime > talk.startTime
@@ -82,6 +98,10 @@ export class CreateTalkCreationRequestUseCase
       command.endTime,
     );
 
-    return this.talkRepository.create(talk);
+    const updatedTalk = await this.talkRepository.update(command.talkId, talk);
+    if (!updatedTalk) {
+      throw new TalkNotFoundError(command.talkId);
+    }
+    return updatedTalk;
   }
 }

@@ -5,8 +5,7 @@ import { CreateRoomUseCase } from './core/usecases/create-room.use-case';
 import { CreateTalkCreationRequestUseCase } from './core/usecases/create-talk-creation-request.use-case';
 import { CreateUserUseCase } from './core/usecases/create-user.use-case';
 import { GetAllRoomsUseCase } from './core/usecases/get-all-rooms.use-case';
-import { HelloWorldController } from './adapters/api/controller/hello-world.controller';
-import { HelloWorldUseCase } from './core/usecases/hello-world.use-case';
+import { HealthController } from './adapters/api/controller/health.controller';
 import { JwtServiceAdapter } from './adapters/jwt/jwt.service';
 import { LoginUseCase } from './core/usecases/login.use-case';
 import { PrismaRoomRepository } from './adapters/prisma/prisma-room.repository';
@@ -28,7 +27,7 @@ import { GetRoomByIdUseCase } from './core/usecases/get-room-by-id.use-case';
 @Module({
   imports: [JwtModule.register({})],
   controllers: [
-    HelloWorldController,
+    HealthController,
     RoomController,
     UserController,
     TalkController,
@@ -56,10 +55,6 @@ import { GetRoomByIdUseCase } from './core/usecases/get-room-by-id.use-case';
       provide: UserRepository,
       useFactory: (prisma: PrismaService) => new PrismaUserRepository(prisma),
       inject: [PrismaService],
-    },
-    {
-      provide: HelloWorldUseCase,
-      useFactory: () => new HelloWorldUseCase(),
     },
     {
       provide: CreateRoomUseCase,

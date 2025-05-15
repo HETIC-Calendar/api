@@ -18,19 +18,12 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  describe('/ (GET)', () => {
+  describe('/health (GET)', () => {
     it('should return "Hello John Doe!"', () => {
       return request(app.getHttpServer())
-        .get('/?name=John Doe')
+        .get('/health')
         .expect(200)
-        .expect('Hello, John Doe!');
-    });
-
-    it('should return 400 if name is not provided', () => {
-      return request(app.getHttpServer()).get('/').expect(400).expect({
-        statusCode: 400,
-        message: 'Name is required!',
-      });
+        .expect('Up!');
     });
   });
 });

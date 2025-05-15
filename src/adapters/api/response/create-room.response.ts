@@ -11,22 +11,22 @@ export class CreateRoomResponse {
   capacity: number;
 
   @ApiProperty()
-  createdAt: Date;
+  updatedAt: Date;
 
   @ApiProperty()
-  updatedAt: Date;
+  createdAt: Date;
 
   constructor(
     id: string,
     name: string,
     capacity: number,
-    createdAt: Date,
     updatedAt: Date,
+    createdAt: Date,
   ) {
     this.id = id;
     this.name = name;
     this.capacity = capacity;
-    this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.createdAt = createdAt;
   }
 }

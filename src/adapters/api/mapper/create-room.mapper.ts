@@ -13,8 +13,8 @@ export class CreateRoomMapper {
       id: room.id,
       name: room.name,
       capacity: room.capacity,
-      createdAt: room.createdAt,
       updatedAt: room.updatedAt,
+      createdAt: room.createdAt,
     };
   }
 }

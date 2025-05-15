@@ -7,15 +7,20 @@ import { RoomRepository } from '../../domain/repository/room.repository';
 import { InMemoryRoomRepository } from '../../../adapters/in-memory/in-memory-room.repository';
 import { TalkAlreadyApprovedOrRejectedError } from '../../domain/error/TalkAlreadyApprovedOrRejectedError';
 import { TalkNotFoundError } from '../../domain/error/TalkNotFoundError';
+import { InMemoryUserRepository } from '../../../adapters/in-memory/in-memory-user.repository';
+import { UserRepository } from '../../domain/repository/user.repository';
+import { UserType } from '../../domain/type/UserType';
 
 describe('ApproveOrRejectTalkUseCase', () => {
   let talkRepository: TalkRepository;
   let roomRepository: RoomRepository;
+  let userRepository: UserRepository;
   let approveOrRejectTalkUseCase: ApproveOrRejectTalkUseCase;
 
   beforeEach(async () => {
     roomRepository = new InMemoryRoomRepository();
-    talkRepository = new InMemoryTalkRepository(roomRepository);
+    userRepository = new InMemoryUserRepository();
+    talkRepository = new InMemoryTalkRepository(roomRepository, userRepository);
     await talkRepository.removeAll();
     await roomRepository.removeAll();
     approveOrRejectTalkUseCase = new ApproveOrRejectTalkUseCase(talkRepository);
@@ -101,6 +106,13 @@ describe('ApproveOrRejectTalkUseCase', () => {
   });
 
   async function createTalk(status: TalkStatus): Promise<void> {
+    await userRepository.create({
+      id: 'speaker-1',
+      email: 'john.doe@example.com',
+      password: 'password123',
+      type: UserType.SPEAKER,
+    });
+
     await roomRepository.create({
       id: 'room-1',
       name: 'Room 1',
@@ -116,7 +128,7 @@ describe('ApproveOrRejectTalkUseCase', () => {
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
+      speakerId: 'speaker-1',
       roomId: 'room-1',
       startTime: new Date('2023-10-01T10:00:00Z'),
       endTime: new Date('2023-10-01T11:00:00Z'),

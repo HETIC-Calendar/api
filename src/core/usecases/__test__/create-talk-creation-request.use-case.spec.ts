@@ -17,8 +17,8 @@ describe('CreateTalkCreationRequestUseCase', () => {
   let createTalkUseCase: CreateTalkCreationRequestUseCase;
 
   beforeEach(async () => {
-    talkRepository = new InMemoryTalkRepository();
     roomRepository = new InMemoryRoomRepository();
+    talkRepository = new InMemoryTalkRepository(roomRepository);
     await talkRepository.removeAll();
     await roomRepository.removeAll();
     createTalkUseCase = new CreateTalkCreationRequestUseCase(

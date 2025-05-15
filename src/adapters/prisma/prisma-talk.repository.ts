@@ -1,17 +1,19 @@
+import { Injectable } from '@nestjs/common';
 import { TalkRepository } from '../../core/domain/repository/talk.repository';
 import { Talk } from '../../core/domain/model/Talk';
 import { PrismaService } from './prisma.service';
 import { PrismaTalkMapper } from './mapper/prisma-talk.mapper';
-import { Injectable } from '@nestjs/common';
 import { TalkStatus } from '../../core/domain/type/TalkStatus';
+import { TalkWithRoomDetail } from '../../core/domain/model/TalkWithRoomDetail';
+import { PrismaTalkWithRoomMapper } from './mapper/prisma-talk-with-room.mapper';
 
 @Injectable()
 export class PrismaTalkRepository implements TalkRepository {
   private mapper: PrismaTalkMapper = new PrismaTalkMapper();
+  private mapperWithRoom: PrismaTalkWithRoomMapper =
+    new PrismaTalkWithRoomMapper();
 
-  constructor(private readonly prisma: PrismaService) {
-    this.mapper = new PrismaTalkMapper();
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(talk: Talk): Promise<Talk> {
     const entity = this.mapper.fromDomain(talk);
@@ -45,11 +47,23 @@ export class PrismaTalkRepository implements TalkRepository {
     return entities.map((entity) => this.mapper.toDomain(entity));
   }
 
-  async findByStatus(status: TalkStatus): Promise<Talk[]> {
-    const entities = await this.prisma.talk.findMany({
-      where: { status },
+  async findByStatusWithRoomDetails(
+    status?: TalkStatus,
+  ): Promise<TalkWithRoomDetail[]> {
+    const talks = await this.prisma.talk.findMany({
+      where: status ? { status } : undefined,
+      include: { room: true },
     });
-    return entities.map((entity) => this.mapper.toDomain(entity));
+
+    return talks.map((entity) => this.mapperWithRoom.toDomain(entity));
+  }
+
+  async findAllWithRoomDetail(): Promise<TalkWithRoomDetail[]> {
+    const talks = await this.prisma.talk.findMany({
+      include: { room: true },
+    });
+
+    return talks.map((entity) => this.mapperWithRoom.toDomain(entity));
   }
 
   async update(id: string, talk: Talk): Promise<Talk | null> {

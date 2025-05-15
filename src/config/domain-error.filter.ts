@@ -14,6 +14,7 @@ import { WrongEmailFormatError } from '../core/domain/error/WrongEmailFormatErro
 import { WrongPasswordFormatError } from '../core/domain/error/WrongPasswordFormatError';
 import { TalkAlreadyApprovedOrRejectedError } from '../core/domain/error/TalkAlreadyApprovedOrRejectedError';
 import { TalkNotFoundError } from '../core/domain/error/TalkNotFoundError';
+import { UserNotAllowedToUpdateTalkError } from '../core/domain/error/UserNotAllowedToUpdateTalkError';
 
 @Catch(DomainError)
 export class DomainErrorFilter implements ExceptionFilter {
@@ -53,6 +54,9 @@ export class DomainErrorFilter implements ExceptionFilter {
       exception instanceof TalkAlreadyApprovedOrRejectedError
     ) {
       return HttpStatus.CONFLICT;
+    }
+    if (exception instanceof UserNotAllowedToUpdateTalkError) {
+      return HttpStatus.FORBIDDEN;
     }
     return HttpStatus.INTERNAL_SERVER_ERROR;
   }

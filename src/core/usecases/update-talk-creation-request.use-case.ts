@@ -10,13 +10,16 @@ import { TalkStatus } from '../domain/type/TalkStatus';
 import { TalkLevel } from '../domain/type/TalkLevel';
 import { TalkAlreadyApprovedOrRejectedError } from '../domain/error/TalkAlreadyApprovedOrRejectedError';
 import { TalkNotFoundError } from '../domain/error/TalkNotFoundError';
+import { UserNotAllowedToUpdateTalkError } from '../domain/error/UserNotAllowedToUpdateTalkError';
+import { User } from '../domain/model/User';
+import { UserType } from '../domain/type/UserType';
 
 export type UpdateTalkCommand = {
+  currentUser: Pick<User, 'id' | 'type'>;
   talkId: string;
   title: string;
   subject: TalkSubject;
   description: string;
-  speaker: string;
   roomId: string;
   level: TalkLevel;
   startTime: Date;
@@ -39,6 +42,11 @@ export class UpdateTalkCreationRequestUseCase
     const existingTalk = await this.talkRepository.findById(command.talkId);
     if (!existingTalk) {
       throw new TalkNotFoundError(command.talkId);
+    }
+    if (!this.canExecute(existingTalk, command.currentUser)) {
+      throw new UserNotAllowedToUpdateTalkError(
+        'User not allowed to update talk',
+      );
     }
     if (existingTalk.status !== TalkStatus.PENDING_APPROVAL) {
       throw new TalkAlreadyApprovedOrRejectedError(
@@ -85,23 +93,28 @@ export class UpdateTalkCreationRequestUseCase
       }
     }
 
-    const talk = new Talk(
-      crypto.randomUUID(),
-      TalkStatus.PENDING_APPROVAL,
-      command.title,
-      command.subject,
-      command.description,
-      command.speaker,
-      command.roomId,
-      command.level,
-      command.startTime,
-      command.endTime,
-    );
+    existingTalk.title = command.title;
+    existingTalk.subject = command.subject;
+    existingTalk.description = command.description;
+    existingTalk.roomId = command.roomId;
+    existingTalk.level = command.level;
+    existingTalk.startTime = command.startTime;
+    existingTalk.endTime = command.endTime;
 
-    const updatedTalk = await this.talkRepository.update(command.talkId, talk);
+    const updatedTalk = await this.talkRepository.update(
+      existingTalk.id,
+      existingTalk,
+    );
     if (!updatedTalk) {
       throw new TalkNotFoundError(command.talkId);
     }
     return updatedTalk;
+  }
+
+  private canExecute(
+    existingTalk: Talk,
+    user: Pick<User, 'id' | 'type'>,
+  ): boolean {
+    return existingTalk.speakerId === user.id || user.type === UserType.PLANNER;
   }
 }

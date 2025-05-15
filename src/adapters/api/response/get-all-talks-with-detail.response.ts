@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { TalkStatus } from '../../../core/domain/type/TalkStatus';
 import { TalkSubject } from '../../../core/domain/type/TalkSubject';
 import { TalkLevel } from '../../../core/domain/type/TalkLevel';
+import { UserType } from '../../../core/domain/type/UserType';
 
 class RoomDetail {
   @ApiProperty()
@@ -20,7 +21,24 @@ class RoomDetail {
   }
 }
 
-class TalksWithRoomDetail {
+class SpeakerDetail {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty()
+  email: string;
+
+  @ApiProperty({ enum: UserType })
+  type: UserType;
+
+  constructor(id: string, email: string, type: UserType) {
+    this.id = id;
+    this.email = email;
+    this.type = type;
+  }
+}
+
+class TalksWithDetail {
   @ApiProperty()
   id: string;
 
@@ -36,9 +54,6 @@ class TalksWithRoomDetail {
   @ApiProperty()
   description: string;
 
-  @ApiProperty()
-  speaker: string;
-
   @ApiProperty({ enum: TalkLevel })
   level: TalkLevel;
 
@@ -50,6 +65,9 @@ class TalksWithRoomDetail {
 
   @ApiProperty({ type: () => RoomDetail })
   room: RoomDetail;
+
+  @ApiProperty({ type: () => SpeakerDetail })
+  speaker: SpeakerDetail;
 
   @ApiProperty()
   createdAt: Date;
@@ -63,11 +81,11 @@ class TalksWithRoomDetail {
     title: string,
     subject: TalkSubject,
     description: string,
-    speaker: string,
     level: TalkLevel,
     startTime: string,
     endTime: string,
     room: RoomDetail,
+    speaker: SpeakerDetail,
     createdAt: Date,
     updatedAt: Date,
   ) {
@@ -76,21 +94,21 @@ class TalksWithRoomDetail {
     this.title = title;
     this.subject = subject;
     this.description = description;
-    this.speaker = speaker;
     this.level = level;
     this.startTime = startTime;
     this.endTime = endTime;
     this.room = room;
+    this.speaker = speaker;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
 }
 
-export class GetAllTalksWithRoomDetailResponse {
-  @ApiProperty({ type: [TalksWithRoomDetail] })
-  talks: TalksWithRoomDetail[];
+export class GetAllTalksWithDetailResponse {
+  @ApiProperty({ type: [TalksWithDetail] })
+  talks: TalksWithDetail[];
 
-  constructor(talks: TalksWithRoomDetail[]) {
+  constructor(talks: TalksWithDetail[]) {
     this.talks = talks;
   }
 }

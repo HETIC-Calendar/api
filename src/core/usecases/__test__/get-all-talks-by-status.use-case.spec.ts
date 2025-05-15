@@ -6,15 +6,19 @@ import { TalkSubject } from '../../domain/type/TalkSubject';
 import { RoomRepository } from '../../domain/repository/room.repository';
 import { InMemoryRoomRepository } from '../../../adapters/in-memory/in-memory-room.repository';
 import { TalkLevel } from '../../domain/type/TalkLevel';
+import { InMemoryUserRepository } from '../../../adapters/in-memory/in-memory-user.repository';
+import { UserRepository } from '../../domain/repository/user.repository';
 
 describe('GetAllTalksByStatusUseCase', () => {
   let talkRepository: TalkRepository;
   let roomRepository: RoomRepository;
+  let userRepository: UserRepository;
   let getAllTalksByStatusUseCase: GetAllTalksByStatusUseCase;
 
   beforeEach(async () => {
     roomRepository = new InMemoryRoomRepository();
-    talkRepository = new InMemoryTalkRepository(roomRepository);
+    userRepository = new InMemoryUserRepository();
+    talkRepository = new InMemoryTalkRepository(roomRepository, userRepository);
     await talkRepository.removeAll();
     await roomRepository.removeAll();
     getAllTalksByStatusUseCase = new GetAllTalksByStatusUseCase(talkRepository);
@@ -156,7 +160,7 @@ describe('GetAllTalksByStatusUseCase', () => {
       subject: TalkSubject.WEB_DEVELOPMENT,
       description:
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
-      speaker: 'John Doe',
+      speakerId: 'speaker-1',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
       startTime: new Date('2023-10-01T10:00:00Z'),

@@ -4,12 +4,15 @@ import { CreateTalkResponse } from '../response/create-talk.response';
 import { Talk } from '../../../core/domain/model/Talk';
 
 export class CreateTalkMapper {
-  static toDomain(request: CreateTalkRequest): CreateTalkCommand {
+  static toDomain(
+    speakerId: string,
+    request: CreateTalkRequest,
+  ): CreateTalkCommand {
     return {
       title: request.title,
       subject: request.subject,
       description: request.description,
-      speaker: request.speaker,
+      speakerId: speakerId,
       roomId: request.roomId,
       level: request.level,
       startTime: new Date(request.startTime),
@@ -24,7 +27,7 @@ export class CreateTalkMapper {
       title: talk.title,
       subject: talk.subject,
       description: talk.description,
-      speaker: talk.speaker,
+      speakerId: talk.speakerId,
       roomId: talk.roomId,
       level: talk.level,
       startTime: talk.startTime.toISOString(),

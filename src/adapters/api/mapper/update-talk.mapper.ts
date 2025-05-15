@@ -2,18 +2,20 @@ import { Talk } from '../../../core/domain/model/Talk';
 import { UpdateTalkRequest } from '../request/update-talk.request';
 import { UpdateTalkCommand } from '../../../core/usecases/update-talk-creation-request.use-case';
 import { UpdateTalkResponse } from '../response/update-talk.response';
+import { ProfileRequest } from '../request/profile.request';
 
 export class UpdateTalkMapper {
   static toDomain(
+    currentUser: ProfileRequest,
     talkId: string,
     request: UpdateTalkRequest,
   ): UpdateTalkCommand {
     return {
-      talkId: talkId,
+      currentUser,
+      talkId,
       title: request.title,
       subject: request.subject,
       description: request.description,
-      speaker: request.speaker,
       roomId: request.roomId,
       level: request.level,
       startTime: new Date(request.startTime),
@@ -28,7 +30,7 @@ export class UpdateTalkMapper {
       title: talk.title,
       subject: talk.subject,
       description: talk.description,
-      speaker: talk.speaker,
+      speakerId: talk.speakerId,
       roomId: talk.roomId,
       level: talk.level,
       startTime: talk.startTime.toISOString(),

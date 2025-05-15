@@ -8,12 +8,14 @@ import { RoomNotFoundError } from '../domain/error/RoomNotFoundError';
 import { TalkSubject } from '../domain/type/TalkSubject';
 import { TalkStatus } from '../domain/type/TalkStatus';
 import { TalkLevel } from '../domain/type/TalkLevel';
+import { UserRepository } from '../domain/repository/user.repository';
+import { UserNotFoundError } from '../domain/error/UserNotFoundError';
 
 export type CreateTalkCommand = {
   title: string;
   subject: TalkSubject;
   description: string;
-  speaker: string;
+  speakerId: string;
   roomId: string;
   level: TalkLevel;
   startTime: Date;
@@ -30,6 +32,7 @@ export class CreateTalkCreationRequestUseCase
   constructor(
     private readonly talkRepository: TalkRepository,
     private readonly roomRepository: RoomRepository,
+    private readonly userRepository: UserRepository,
   ) {}
 
   async execute(command: CreateTalkCommand): Promise<Talk> {
@@ -46,6 +49,11 @@ export class CreateTalkCreationRequestUseCase
       throw new InvalidTalkTimeError(
         `Talks must be between ${this.MINIMAL_HOUR} and ${this.MAXIMAL_HOUR} hours.`,
       );
+    }
+
+    const speaker = await this.userRepository.findById(command.speakerId);
+    if (!speaker) {
+      throw new UserNotFoundError(command.speakerId);
     }
 
     const room = await this.roomRepository.findById(command.roomId);
@@ -75,7 +83,7 @@ export class CreateTalkCreationRequestUseCase
       command.title,
       command.subject,
       command.description,
-      command.speaker,
+      command.speakerId,
       command.roomId,
       command.level,
       command.startTime,

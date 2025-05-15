@@ -6,9 +6,9 @@ import { Injectable } from '@nestjs/common';
 export class InMemoryUserRepository implements UserRepository {
   private users: Map<string, User> = new Map();
 
-  create(data: Pick<User, 'email' | 'password' | 'type'>): User {
+  create(data: Pick<User, 'id' | 'email' | 'password' | 'type'>): User {
     const user = new User(
-      crypto.randomUUID(),
+      data.id,
       data.email,
       data.password,
       data.type,

@@ -8,14 +8,25 @@ import {
 import { Request } from 'express';
 import { TokenService } from '../../../core/domain/service/token.service';
 import { ProfileRequest } from '../request/profile.request';
+import { IS_PUBLIC_KEY } from '../decorator/public.decorator';
+import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
     @Inject('TokenService') private readonly tokenService: TokenService,
+    private readonly reflector: Reflector,
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) {
+      return true;
+    }
+
     const request = context.switchToHttp().getRequest<Request>();
     const authHeader: string | undefined = request.headers.authorization;
 
@@ -31,7 +42,7 @@ export class JwtAuthGuard implements CanActivate {
 
     try {
       const payload = this.tokenService.verifyToken(token) as ProfileRequest;
-      (request as Request & { user?: unknown }).user = payload;
+      (request as Request & { user?: ProfileRequest }).user = payload;
       return true;
     } catch {
       throw new UnauthorizedException('Invalid or expired token');

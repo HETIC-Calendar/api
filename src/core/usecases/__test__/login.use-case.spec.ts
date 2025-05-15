@@ -56,6 +56,7 @@ describe('LoginUseCase', () => {
     expect(tokenService.generateToken).toHaveBeenCalledWith({
       id: user.id,
       email: user.email,
+      type: user.type,
     });
   });
 

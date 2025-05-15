@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TokenService } from '../../core/domain/service/token.service';
 import { JwtService } from '@nestjs/jwt';
+import { ProfileRequest } from '../api/request/profile.request';
 
 @Injectable()
 export class JwtServiceAdapter implements TokenService {
@@ -16,7 +17,7 @@ export class JwtServiceAdapter implements TokenService {
     });
   }
 
-  verifyToken(token: string): any {
+  verifyToken(token: string): ProfileRequest {
     return this.jwtService.verify(token, {
       secret: this.secret,
     });

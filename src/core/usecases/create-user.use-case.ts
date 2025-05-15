@@ -4,6 +4,7 @@ import { WrongEmailFormatError } from '../domain/error/WrongEmailFormatError';
 import { WrongPasswordFormatError } from '../domain/error/WrongPasswordFormatError';
 import { User } from '../domain/model/User';
 import { UserRepository } from '../domain/repository/user.repository';
+import { UserType } from '../domain/type/UserType';
 import * as bcrypt from 'bcryptjs';
 
 export type CreateUserCommand = {
@@ -36,7 +37,12 @@ export class CreateUserUseCase implements UseCase<CreateUserCommand, User> {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User(this.generateId(), email, hashedPassword);
+    const user = new User(
+      this.generateId(),
+      email,
+      hashedPassword,
+      UserType.SPEAKER,
+    );
 
     await this.userRepository.create(user);
     return user;

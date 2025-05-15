@@ -17,6 +17,8 @@ import {
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { Roles } from '../decorator/roles.decorator';
+import { UserType } from '../../../core/domain/type/UserType';
 
 @Controller('/rooms')
 export class RoomController {
@@ -63,6 +65,7 @@ export class RoomController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Roles(UserType.PLANNER)
   @Post()
   @ApiOperation({ summary: 'Create a new room' })
   @ApiCreatedResponse({

@@ -105,7 +105,7 @@ import { DeleteTalkUseCase } from './core/usecases/delete-talk.use-case';
     {
       provide: DeleteTalkUseCase,
       useFactory: (talkRepository: TalkRepository) =>
-        new ApproveOrRejectTalkUseCase(talkRepository),
+        new DeleteTalkUseCase(talkRepository),
       inject: [TalkRepository],
     },
     {

@@ -27,8 +27,9 @@ export class CreateTalkCreationRequestUseCase
   implements UseCase<CreateTalkCommand, Talk>
 {
   // TODO: Move to config
-  private readonly MINIMAL_HOUR = 9;
-  private readonly MAXIMAL_HOUR = 19;
+  // Limit in UTC timezone (equivalent to 9am to 7pm in UTC+2)
+  private readonly MINIMAL_HOUR = 7;
+  private readonly MAXIMAL_HOUR = 17;
 
   constructor(
     private readonly talkRepository: TalkRepository,

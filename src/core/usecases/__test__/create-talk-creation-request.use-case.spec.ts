@@ -198,7 +198,7 @@ describe('CreateTalkCreationRequestUseCase', () => {
         'Une introduction à la Clean Architecture dans le monde TypeScript.',
       roomId: 'room-1',
       level: TalkLevel.BEGINNER,
-      startTime: new Date('2023-10-01T08:00:00Z'),
+      startTime: new Date('2023-10-01T06:00:00Z'),
       endTime: new Date('2023-10-01T10:00:00Z'),
     };
 
@@ -207,7 +207,7 @@ describe('CreateTalkCreationRequestUseCase', () => {
 
     // Then
     await expect(execute).rejects.toThrow(
-      'Talks must be between 9 and 19 hours.',
+      'Talks must be between 7 and 17 hours.',
     );
   });
 

@@ -66,4 +66,19 @@ describe('PrismaUserMapper', () => {
       });
     },
   );
+
+  it('should throw an error for an invalid user type', () => {
+    // Given
+    const invalidEntity: UserEntity = {
+      id: 'user-1',
+      email: 'user@example.com',
+      password: 'securepassword123',
+      type: 'INVALID_TYPE' as $Enums.UserType,
+      updatedAt: new Date('2023-10-01T10:00:00Z'),
+      createdAt: new Date('2023-10-01T11:00:00Z'),
+    };
+
+    // When / Then
+    expect(() => mapper.toDomain(invalidEntity)).toThrow('Invalid user type');
+  });
 });
